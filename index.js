@@ -7,8 +7,6 @@ const app = express();
 
 // middleware
 app.use(express.static('public')); // mọi yêu cầu tĩnh trong public được xử lý trước khi qua route khác 
-app.use(express.urlencoded({ extended: true })); // nhận dữ liệu từ người dùng
-
 
 // view
 const handlebars = require('express-handlebars');
