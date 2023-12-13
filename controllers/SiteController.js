@@ -1,3 +1,5 @@
+const db = require('../utilities/db')
+
 class SiteController{
 
     // [GET] /:  
@@ -6,4 +8,4 @@ class SiteController{
         res.render('home')
     }
 }
-module.exports = new SiteController;
+module.exports = new SiteController; 
