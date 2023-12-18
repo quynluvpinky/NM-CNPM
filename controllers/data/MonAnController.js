@@ -8,7 +8,9 @@ class MonAnController{
     }
     //[GET] data/monan
     async getAll(req, res){
+        console.log('hello')
         const result = await MonAn.getAll();
+        console.log(result);
         res.status(200).json(result);
     }
 }

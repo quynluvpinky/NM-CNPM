@@ -3,7 +3,16 @@
 </head>
 <main>
     <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8 order-md-2" style="background-color: aqua;">
+                vung trai
 
+            </div>
+            <div class="col-12 col-md-4 order-md-1" style="background-color: bisque;">
+                vung phai
+
+            </div>
+        </div>
     </div>
 </main>
 
@@ -27,8 +36,7 @@
             success: function(data){
                 var result = data.filter(item => {
                     return monanIdSelected.includes(item.mamon)
-                })
-                console.log(result);
+                });
             }
         })
         $.ajax({
@@ -38,8 +46,7 @@
             success: function(data){
                 var result = data.filter(item => {
                     return sanphamIdSelected.includes(item.masanpham);
-                })
-                console.log(result);
+                });
             }
         })
     })

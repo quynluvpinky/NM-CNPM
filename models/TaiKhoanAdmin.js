@@ -7,7 +7,7 @@ module.exports = class TaiKhoanAdmin{
     }
     static async getAll(){
         return await db.many(`
-            SELECT * FROM ${tbName}
+            SELECT * FROM public."${tbName}"
         `);
     }
     static async getOneByUsername(username){

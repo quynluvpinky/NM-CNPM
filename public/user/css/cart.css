@@ -1,4 +1,6 @@
 main .row {
     max-width: 65em;
     margin: 0 auto !important;
+    height: 400px;
 }
+

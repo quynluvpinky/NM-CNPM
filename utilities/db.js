@@ -79,7 +79,7 @@ async function main() {
 			console.error('Error initializing database:', error);
 		}
 	} finally { 
-		pgp.end(); 
+		// pgp.end(); 
 	}	
 }
 
