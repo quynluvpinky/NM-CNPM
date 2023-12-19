@@ -64,23 +64,23 @@ async function main() {
 			console.log('Database already exists.');
 		} else {
 			await createDatabase(databaseName);
+			// init database db
+			const fs = require('fs');
+			const path = require('path')
+			const sqlFile = fs.readFileSync(path.join(__dirname, '..', 'data', 'QLCANTIN.sql'), 'utf8');
+			try {
+				// db
+				await db.query(sqlFile);
+				console.log('Database initialized successfully.');
+			} catch (error) {
+				console.error('Error initializing database:', error); 
+			}
 		}
 		/*******************************************************************/
 
-		// init database db
-		const fs = require('fs');
-		const path = require('path')
-		const sqlFile = fs.readFileSync(path.join(__dirname, '..', 'data', 'QLCANTIN.sql'), 'utf8');
-		try {
-			// db
-			await db.query(sqlFile);
-			console.log('Database initialized successfully.');
-		} catch (error) { 
-			console.error('Error initializing database:', error);
-		}
-	} finally { 
-		pgp.end(); 
-	}	
+	} finally {
+		// pgp.end(); 
+	}
 }
 
 // Gọi hàm chính
