@@ -2,24 +2,114 @@
     <link rel="stylesheet" href="user/css/cart.css">
 </head>
 <main>
-    <div class="container">
+    <div class="container position-relative">
         <div class="row">
-            <div class="col-12 col-md-8 order-md-2" style="background-color: aqua;">
-                vung trai
-
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 order-md-2" id="purchase">
+                <div class="card mb-3 border-black p-2">
+                    <div class="text-center"><h2 class="card-title fw-light">Đặt hàng</h2></div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Họ tên:</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Nhập họ tên">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Số điện thoại:</label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Nhập số điện thoại">
+                        </div>
+                        <div class="mb-3">
+                            <label for="totalAmount" class="form-label">Tổng tiền:</label>
+                            <div id="totalAmount" class="form-control" readonly>2000.000</div>
+                        </div>
+                        <button id="purchaseBtn" type="button" class="btn btn-danger">Thanh toán</button>
+                    </form>
+                </div>
             </div>
-            <div class="col-12 col-md-4 order-md-1" style="background-color: bisque;">
-                vung phai
-
+            
+            <div class="col-12 col-md-8 order-md-1" id="list-product">
             </div>
         </div>
     </div>
 </main>
-
+<head>
+    <script id="monan-template"type="text/x-handlebars-template">
+        \{{#each data}}
+            <div id="card-\{{this.mamon}}" class="card mb-3 border border-black position-relative product">
+                <div class="row g-0">
+                    <div class="col-4">
+                        <img src="\{{this.photo}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body">
+                            <h5 class="card-title">\{{this.tenmon}}</h5>
+                            <p class="card-text">Giá: \{{formatCurrency 25}}</p>
+                            <ul class="pagination align-items-center">
+                                Số lượng:
+                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.mamon}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
+                                <li class="page-item"><input class="page-link text-center" type="tel" 
+                                    value="\{{localStorageGetItem this.mamon ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.mamon}}', \{{../type}})"/></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('\{{this.mamon}}', \{{../type}})"><i class="fas fa-plus"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="position-absolute btn btn-danger rounded-circle"
+                    onclick="removeProductBtn('\{{this.mamon}}', \{{../type}})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        \{{/each}}
+    </script>
+    
+    
+    
+    <script id="sanpham-template"type="text/x-handlebars-template">
+        \{{#each data}}
+            <div id="card-\{{this.masanpham}}" class="card mb-3 border border-black position-relative product">
+                <div class="row g-0">
+                    <div class="col-4">
+                        <img src="\{{this.photo}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body">
+                            <h5 class="card-title">\{{this.tensanpham}}</h5>
+                            <p class="card-text">Giá: \{{formatCurrency this.giaca}}</p>
+                            <ul class="pagination align-items-center">
+                                Số lượng:
+                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.masanpham}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
+                                <li class="page-item"><input class="page-link text-center" type="tel" 
+                                    value="\{{localStorageGetItem this.masanpham ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.masanpham}}', \{{../type}})"/></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('\{{this.masanpham}}', \{{../type}})"><i class="fas fa-plus"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="position-absolute btn btn-danger rounded-circle"
+                    onclick="removeProductBtn('\{{this.masanpham}}', \{{../type}})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        \{{/each}}
+    </script>
+</head>
 <script>
+    Handlebars.registerHelper('localStorageGetItem', function(key, type) {
+        return localStorage.getItem(`${key}-${type}`);
+    });
+    Handlebars.registerHelper('formatCurrency', function(amount) {
+        return new Handlebars.SafeString(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount * 1000));
+    });
+    var monanIdSelected = [];
+    var sanphamIdSelected = [];
+    var sanpham = [];
     $(document).ready(function() {
-        var monanIdSelected = [];
-        var sanphamIdSelected = [];
         for(let i = 0; i < localStorage.length;i++){
             let key = localStorage.key(i);
             if(key.split('-')[1] == 0){
@@ -37,6 +127,9 @@
                 var result = data.filter(item => {
                     return monanIdSelected.includes(item.mamon)
                 });
+                var source = $('#monan-template').html();
+                var template = Handlebars.compile(source);
+                $('#list-product').append(template({data: result, type: 0}));
             }
         })
         $.ajax({
@@ -47,7 +140,70 @@
                 var result = data.filter(item => {
                     return sanphamIdSelected.includes(item.masanpham);
                 });
+                sanpham = result;
+                var source = $('#sanpham-template').html();
+                var template = Handlebars.compile(source);
+                $('#list-product').append(template({data: result, type: 1}));
+                updateTotalCost();
             }
         })
     })
+    function removeProductBtn(key, type){
+        if(confirm('Bạn có muốn xóa sản phẩm đang chọn')){
+            localStorage.removeItem(`${key}-${type}`);
+            $(`#card-${key}`).remove();
+            if(type == 0){
+                let i = monanIdSelected.indexOf(key);
+                if(i !== -1) monanIdSelected.splice(i, 1);
+            }
+            else if(type == 1){
+                let i = sanphamIdSelected.indexOf(key);
+                if(i !== -1) sanphamIdSelected.splice(i, 1);
+            }
+            updateTotalCost();
+            return true;
+        }
+        return false;
+    }
+    function changeQuantity(input, key, type){
+        let isChange = false;
+        if(input.value.length === 0){
+            input.value = '1';
+            isChange = true;
+        }else {
+            let value = input.value
+            if(/^[0-9]+$/.test(value)){
+                isChange = true;
+            }else {
+                input.value = value.replace(/[^0-9]/g, '');
+            }
+        }
+        if(isChange){
+            if(input.value == 0 && !removeProductBtn(key,type)){
+                input.value = '1';
+            }
+            localStorage.setItem(`${key}-${type}`, input.value);
+            updateTotalCost();
+        }
+    }
+    function increaseQuantityBtn(key, type){
+        var inputElement = $(`#card-${key} input`)[0];
+        inputElement.value = parseInt($(`#card-${key} input`)[0].value) + 1;
+        changeQuantity(inputElement, key, type);
+    }
+    function decreaseQuantityBtn(key, type){
+        var inputElement = $(`#card-${key} input`)[0];
+        inputElement.value = parseInt($(`#card-${key} input`)[0].value) - 1;
+        changeQuantity(inputElement, key, type);
+    }
+    function updateTotalCost(){
+        let cost = 0;
+        cost = monanIdSelected.reduce((res, item) =>{
+            return res + 25 * parseInt(localStorage.getItem(`${item}-0`));
+        }, cost);
+        cost = sanphamIdSelected.reduce((res, item) =>{
+            return res + parseInt(localStorage.getItem(`${item}-1`)) * sanpham[sanpham.findIndex(obj => obj.masanpham == item)].giaca;
+        }, cost);
+        $('#totalAmount').html(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cost * 1000));       
+    }
 </script>

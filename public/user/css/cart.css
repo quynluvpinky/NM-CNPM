@@ -1,6 +1,35 @@
-main .row {
+main .container > .row {
     max-width: 65em;
     margin: 0 auto !important;
-    height: 400px;
 }
 
+main .card{ 
+    min-height: 130px;
+    border-radius: 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+}
+main .card.product{
+    height: 180px;
+
+}
+main .card img {
+    width: 100%;
+    object-fit: cover;
+    height: 180px;
+}
+main .card > button {
+    top: 20px;
+    right: 20px;
+}
+
+@media (min-width: 768px) {
+    main #purchase .card{
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+    }
+}
+main #purchaseBtn{
+    width: 100%;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+}
