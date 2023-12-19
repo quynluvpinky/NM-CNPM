@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 // index.js này để set tất cả routes
-const userRouter = require('./user/index')
-const adminRouter = require('./admin/index')
-
+const userRouter = require('./user')
+const adminRouter = require('./admin')
+const dataRouter = require('./data')
 function route(app) {
     // Routes for admin
     router.use('/admin', (req, res, next) => {
@@ -18,6 +18,10 @@ function route(app) {
         app.set("views", './views/user'); 
         userRouter(req, res, next);
     });
+    
+    router.use('/data', (req, res, next) => { 
+        dataRouter(req,res, next);
+    })
     app.use(router);
 }
 module.exports = route; 
