@@ -320,3 +320,4 @@ INSERT INTO SANPHAMTONKHO (MASANPHAM, TENSANPHAM, PHOTO, SOLUONG, GIACA, LOAISAN
 											      ('SP10', 'Vinamilk', 'https://drive.google.com/uc?export=view&id=1Hvej_IZUzgTOwXsspBD56CcYMbj1QNor', 20, 7, 'LO03');
 
 INSERT INTO TAIKHOANADMIN (TAIKHOAN,MATKHAU ) VALUES ('admin', '123456');
+
