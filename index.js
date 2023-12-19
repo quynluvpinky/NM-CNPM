@@ -1,9 +1,13 @@
 const express = require("express");
 require("dotenv").config();
+const db = require('./utilities/db')
 //***************************************************//
 
 // create express app
 const app = express();
+
+//create database
+db.createDatabase();
 
 // middleware
 const path = require('path');
