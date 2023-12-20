@@ -6,7 +6,12 @@ const adminRouter = require('./admin')
 const dataRouter = require('./data')
 function route(app) {
     // Routes for admin
-    router.use('/admin', (req, res, next) => {
+    router.use('/admin', (req, res, next)=>{
+        if(!req.isAuthenticated()){
+            return res.redirect('/forbidden');
+        }
+        next();
+    },(req, res, next) => {
         // Thiết lập đường dẫn views riêng cho admin
         app.set("views", './views/admin'); 
         adminRouter(req, res, next);
