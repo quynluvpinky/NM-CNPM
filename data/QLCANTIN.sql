@@ -292,15 +292,15 @@ AFTER INSERT ON CHITIETMUAHANG
 FOR EACH ROW EXECUTE FUNCTION UpdateSauKhiMuaHang();
 
 
-INSERT INTO MONAN (MAMON, TENMON, PHOTO) VALUES ('MA01', 'Thịt kho trứng', 'https://drive.google.com/uc?export=view&id=1PlKdlZy2Nn8RFboUgdLEFhJ47SiEXHx2'),
-						('MA02', 'Tôm rim hành tỏi', 'https://drive.google.com/uc?export=view&id=1pYJgbRMQEOBFWcuRcQg_DQMLCHc2CiwN'),
-						('MA03', 'Thịt kho cải chua', 'https://drive.google.com/uc?export=view&id=1pp7_0lFUIZ-jQG4iPaBtRCkilCGEctF8'),
-						('MA04', 'Bò xào bắp non', 'https://drive.google.com/uc?export=view&id=1_5zJypb7AStQZ_NqG0c8wtOQumjXPtFG'),
-						('MA05', 'Óc móng tay xào rau muống', 'https://drive.google.com/uc?export=view&id=1Am3Suxy25nr8fvzJ0LF79KIDt3G0Ca4k'),
-						('MA06', 'Tim bò xào hành cần', 'https://drive.google.com/uc?export=view&id=1Ox9rfqO8IIfzrLenNnBvcjsvENhA1wFC'),
-						('MA07', 'Thịt kho tam củ', 'https://drive.google.com/uc?export=view&id=1Po0TVWW-Rr1wZ1TDJIX5XS4hivsOYHTM'),
-						('MA08', 'Sườn non chua ngọt', 'https://drive.google.com/uc?export=view&id=1Fxx6XqfXFk05UDUMAX2SMrfoPxIzqmBL'),
-						('MA09', 'Gà kho rau răm', 'https://drive.google.com/uc?export=view&id=1NAVR6BmiAFB1fptzyibYTWhN9ZTGypBA');
+INSERT INTO MONAN (MAMON, TENMON, PHOTO,GIA) VALUES ('MA01', 'Thịt kho trứng', 'https://drive.google.com/uc?export=view&id=1PlKdlZy2Nn8RFboUgdLEFhJ47SiEXHx2',25),
+						('MA02', 'Tôm rim hành tỏi', 'https://drive.google.com/uc?export=view&id=1pYJgbRMQEOBFWcuRcQg_DQMLCHc2CiwN',25),
+						('MA03', 'Thịt kho cải chua', 'https://drive.google.com/uc?export=view&id=1pp7_0lFUIZ-jQG4iPaBtRCkilCGEctF8',25),
+						('MA04', 'Bò xào bắp non', 'https://drive.google.com/uc?export=view&id=1_5zJypb7AStQZ_NqG0c8wtOQumjXPtFG',25),
+						('MA05', 'Óc móng tay xào rau muống', 'https://drive.google.com/uc?export=view&id=1Am3Suxy25nr8fvzJ0LF79KIDt3G0Ca4k',25),
+						('MA06', 'Tim bò xào hành cần', 'https://drive.google.com/uc?export=view&id=1Ox9rfqO8IIfzrLenNnBvcjsvENhA1wFC',25),
+						('MA07', 'Thịt kho tam củ', 'https://drive.google.com/uc?export=view&id=1Po0TVWW-Rr1wZ1TDJIX5XS4hivsOYHTM',25),
+						('MA08', 'Sườn non chua ngọt', 'https://drive.google.com/uc?export=view&id=1Fxx6XqfXFk05UDUMAX2SMrfoPxIzqmBL',25),
+						('MA09', 'Gà kho rau răm', 'https://drive.google.com/uc?export=view&id=1NAVR6BmiAFB1fptzyibYTWhN9ZTGypBA',25);
 
 
 

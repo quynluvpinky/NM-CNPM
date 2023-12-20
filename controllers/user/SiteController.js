@@ -1,4 +1,6 @@
-const passport = require('passport');
+const { ColumnSet } = require('pg-promise');
+const MonanModel = require('../../models/MonAn');
+const SanphamModel = require('../../models/SanPhamTonKho');
 class SiteController{
     // [GET] /
     async index(req, res) {
@@ -10,7 +12,26 @@ class SiteController{
     }
     // [GET] /detail/:type/:id
     async detail(req, res){
-        res.render('detail');
+        let type = req.query.type;
+        let id = req.query.id;
+        
+        let obj = {type,id};
+        if(type == 0){
+            const result = await MonanModel.getOneById(id);
+            if(result == null) return res.redirect('/');
+            obj['name'] = result.tenmon;
+            obj['photo'] = result.photo;
+            obj['price'] = result.gia;
+            // obj['description'] = result.description;
+        }else if(type == 1){    
+            const result = await SanphamModel.getOneById(id);
+            if(result == null) return res.redirect('/');
+            obj['name'] = result.tensanpham;
+            obj['photo'] = result.photo;
+            obj['price'] = result.giaca;
+            // obj['description'] = result.description;
+        }
+        res.render('detail', obj);
     }
     // [GET] /login
     async login(req, res,next){

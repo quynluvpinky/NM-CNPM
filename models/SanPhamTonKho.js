@@ -15,7 +15,14 @@ module.exports = class SanPhamTonKho{
         `)
     }
     static async getOneById(id){
-        const res= await db.get(tbName, '')
+        const res = await db.oneOrNone(`
+            SELECT * FROM public."${tbName}"
+            WHERE "masanpham" = $1
+        `,[id]);
+        if(res){
+            return new SanPhamTonKho({...res});
+        }
+        return res;
     }
     static async getGroupInPage(page = 1, per_page = 8){
         let arr = await db.many(`SELECT s.*,l.tenloai FROM public."${tbName}" s left join public."loaisanpham" l on s.loaisanpham = l.maloai`);;
