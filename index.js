@@ -9,6 +9,21 @@ const app = express();
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); // mọi yêu cầu tĩnh trong public được xử lý trước khi qua route khác
 
+app.use(express.urlencoded({
+    extended:true
+}))
+app.use(express.json())
+
+const session = require('express-session');
+app.use(session({
+    secret: "secret", 
+    saveUninitialized: true, 
+    resave: true
+}))
+
+require('./middlewares/passport')(app);
+
+
 // view
 const handlebars = require('express-handlebars');
 app.engine('hbs', handlebars.engine({

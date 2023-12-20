@@ -5,13 +5,11 @@ module.exports = class TaiKhoanAdmin{
         this.taikhoan = taikhoan;
         this.matkhau = matkhau;
     }
-    static async getAll(){
-        return await db.many(`
-            SELECT * FROM public."${tbName}"
-        `);
-    }
     static async getOneByUsername(username){
-        const res = await db.get(tbName, 'taikhoan', username);
+        const res = await db.oneOrNone(`
+            SELECT * FROM public."${tbName}"
+            WHERE "taikhoan" = $1
+        `,[username]);
         if(res){
             return new TaiKhoanAdmin({...res});
         }
