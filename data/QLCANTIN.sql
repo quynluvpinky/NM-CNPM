@@ -308,16 +308,16 @@ INSERT INTO LOAISANPHAM (MALOAI, TENLOAI) VALUES ('LO01', 'Nước đóng chai')
 												 ('LO02', 'Bánh đóng gói'),
 												 ('LO03', 'Sữa');
 
-INSERT INTO SANPHAMTONKHO (MASANPHAM, TENSANPHAM, PHOTO, SOLUONG, GIACA, LOAISANPHAM) VALUES  ('SP01', 'Sting', 'https://drive.google.com/uc?export=view&id=1GZUfRgHjIFL5KjhfZTEhQPfzMgB6cz5Q', 40, 10, 'LO01'),
-											      ('SP02', 'Lavie', 'https://drive.google.com/uc?export=view&id=1dpysviPliDDEPmuYWRdJ58bOfO1rurMi',45, 6, 'LO01'),
-											      ('SP03', 'Aquafina', 'https://drive.google.com/uc?export=view&id=1Qn0G_t_pBXtNoqU8bHasZ3Ol0Ofs7CkS', 45, 6, 'LO01'),
-											      ('SP04', 'Trà xanh không độ', 'https://drive.google.com/uc?export=view&id=1SopyaZ40Z36GywNK0TS4ChD9K03oK3rD', 30, 10, 'LO01'),
-											      ('SP05', 'Bánh mì chà bông Staff', 'https://drive.google.com/uc?export=view&id=1Qv60r-HXDx6VPE717eAbdZl5weFZQBUR', 20, 8, 'LO02'),
-											      ('SP06', 'Bánh mì Otto', 'https://drive.google.com/uc?export=view&id=1g8tfXDyznPccbU50s4ippMT98Ou6XLAq', 20, 8, 'LO02'),
-											      ('SP07', 'Gold Daisy bánh kem xốp sữa', 'https://drive.google.com/uc?export=view&id=1ZRp2Sg1p5szmYG-pjttHxIghhayGwpiu' ,15, 25, 'LO02'),
-											      ('SP08', 'Khoai tây chiên slide', 'https://drive.google.com/uc?export=view&id=1QDUitnps7pNEzk0LVHq5--P9UJldkI_q', 20, 26, 'LO02'),
-											      ('SP09', 'Milo', 'https://drive.google.com/uc?export=view&id=1NOat7pJHEnQO9RxA3OrwrkJ8vVsXHp4K', 30, 6, 'LO03'),
-											      ('SP10', 'Vinamilk', 'https://drive.google.com/uc?export=view&id=1Hvej_IZUzgTOwXsspBD56CcYMbj1QNor', 20, 7, 'LO03');
+INSERT INTO SANPHAMTONKHO (MASANPHAM, TENSANPHAM, PHOTO, SOLUONG, GIACA, LOAISANPHAM) VALUES  ('SP01', 'Sting', 'https://drive.google.com/uc?export=view&id=1GZUfRgHjIFL5KjhfZTEhQPfzMgB6cz5Q', 40, 10000, 'LO01'),
+											      ('SP02', 'Lavie', 'https://drive.google.com/uc?export=view&id=1dpysviPliDDEPmuYWRdJ58bOfO1rurMi',45, 6000, 'LO01'),
+											      ('SP03', 'Aquafina', 'https://drive.google.com/uc?export=view&id=1Qn0G_t_pBXtNoqU8bHasZ3Ol0Ofs7CkS', 45, 6000, 'LO01'),
+											      ('SP04', 'Trà xanh không độ', 'https://drive.google.com/uc?export=view&id=1SopyaZ40Z36GywNK0TS4ChD9K03oK3rD', 30, 10000, 'LO01'),
+											      ('SP05', 'Bánh mì chà bông Staff', 'https://drive.google.com/uc?export=view&id=1Qv60r-HXDx6VPE717eAbdZl5weFZQBUR', 20, 8000, 'LO02'),
+											      ('SP06', 'Bánh mì Otto', 'https://drive.google.com/uc?export=view&id=1g8tfXDyznPccbU50s4ippMT98Ou6XLAq', 20, 8000, 'LO02'),
+											      ('SP07', 'Gold Daisy bánh kem xốp sữa', 'https://drive.google.com/uc?export=view&id=1ZRp2Sg1p5szmYG-pjttHxIghhayGwpiu' ,15, 25000, 'LO02'),
+											      ('SP08', 'Khoai tây chiên slide', 'https://drive.google.com/uc?export=view&id=1QDUitnps7pNEzk0LVHq5--P9UJldkI_q', 20, 26000, 'LO02'),
+											      ('SP09', 'Milo', 'https://drive.google.com/uc?export=view&id=1NOat7pJHEnQO9RxA3OrwrkJ8vVsXHp4K', 30, 6000, 'LO03'),
+											      ('SP10', 'Vinamilk', 'https://drive.google.com/uc?export=view&id=1Hvej_IZUzgTOwXsspBD56CcYMbj1QNor', 20, 7000, 'LO03');
 
 INSERT INTO TAIKHOANADMIN (TAIKHOAN,MATKHAU ) VALUES ('admin', '123456');
 
