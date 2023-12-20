@@ -22,14 +22,15 @@ class SiteController{
             obj['name'] = result.tenmon;
             obj['photo'] = result.photo;
             obj['price'] = result.gia;
-            // obj['description'] = result.description;
+            obj['description'] = result.mota;
         }else if(type == 1){    
             const result = await SanphamModel.getOneById(id);
             if(result == null) return res.redirect('/');
             obj['name'] = result.tensanpham;
             obj['photo'] = result.photo;
             obj['price'] = result.giaca;
-            // obj['description'] = result.description;
+            obj['count'] = result.soluong
+            obj['description'] = result.mota;
         }
         res.render('detail', obj);
     }

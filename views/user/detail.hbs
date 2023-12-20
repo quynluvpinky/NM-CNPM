@@ -1,0 +1,83 @@
+<head>
+    <link rel="stylesheet" href="user/css/detail.css">
+</head>
+<main>
+    <div class="container">
+        <div class="row">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chi tiết sản phẩm</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div id="card-{{id}}" class="card mb-3 position-relative product">
+                <div class="d-none" id="Id-Type-Obj">{{id}}-{{type}}</div>
+                <div class="row g-0">
+                    <div class="col-md-4 col-12">
+                        <img src="{{photo}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8 col-12">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">{{name}}</h5>
+                            <p class="card-text">Giá: {{formatCurrency price}}</p>
+                            <p class="card-text">Mô tả: {{description}}</p>
+                            <ul class="pagination align-items-center">
+                                Số lượng mua:
+                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('{{id}}', {{type}})"><i class="fas fa-minus"></i></a></li>
+                                <li class="page-item"><input class="page-link text-center" type="tel" 
+                                    style="width: 50px;" oninput="changeQuantity(this, '{{id}}', {{type}})"/></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('{{id}}', {{type}})"><i class="fas fa-plus"></i></a></li>
+                            </ul>
+                            {{#if (eq type 1)}}
+                            <p class="card-text">Số hàng tồn: <span id="quantity-{{id}}">{{count}}</span></p>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    var id;
+    var type;
+    $(document).ready(function(){
+        id = $('#Id-Type-Obj').html().split('-')[0];
+        type = $('#Id-Type-Obj').html().split('-')[1];
+        let value = localStorage.getItem(`${id}-${type}`);
+        if(value == null) value = 0; 
+        $(`#card-${id} input`)[0].value = value;
+    })
+    function increaseQuantityBtn(id, type){
+        var inputElement = $(`#card-${id} input`)[0];
+        inputElement.value = parseInt($(`#card-${id} input`)[0].value) + 1;
+        changeQuantity(inputElement, id, type);
+    }
+    function decreaseQuantityBtn(id, type){
+        var inputElement = $(`#card-${id} input`)[0];
+        if(inputElement.value != '0'){
+            inputElement.value = parseInt(inputElement.value) - 1;
+            changeQuantity(inputElement, id, type);
+        }
+    }
+    function changeQuantity(input, id, type){
+        let isChange = false;
+        if(input.value.length === 0){
+            input.value = '0';
+        }
+        let value = input.value
+        input.value = value.replace(/[^0-9]/g, '');
+        
+        if(input.value == 0){
+            localStorage.removeItem(`${id}-${type}`);
+        }
+        else {
+            if(type == 1 && parseInt(input.value) > parseInt($(`#quantity-${id}`).html())){
+                input.value = parseInt($(`#quantity-${id}`).html())
+            }
+            localStorage.setItem(`${id}-${type}`, input.value);
+        }
+    }
+</script>

@@ -51,7 +51,7 @@
                             <h5 class="card-title">\{{this.tenmon}}</h5>
                             <p class="card-text">Giá: \{{formatCurrency this.gia}}</p>
                             <ul class="pagination align-items-center">
-                                Số lượng:
+                                Số lượng mua:
                                 <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.mamon}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
                                 <li class="page-item"><input class="page-link text-center" type="tel" 
                                     value="\{{localStorageGetItem this.mamon ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.mamon}}', \{{../type}})"/></li>
@@ -81,8 +81,9 @@
                         <div class="card-body">
                             <h5 class="card-title">\{{this.tensanpham}}</h5>
                             <p class="card-text">Giá: \{{formatCurrency this.giaca}}</p>
+                            <p class="card-text">Số hàng tồn: <span id="quantity-\{{this.masanpham}}">\{{this.soluong}}</span></p>
                             <ul class="pagination align-items-center">
-                                Số lượng:
+                                Số lượng mua:
                                 <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.masanpham}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
                                 <li class="page-item"><input class="page-link text-center" type="tel" 
                                     value="\{{localStorageGetItem this.masanpham ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.masanpham}}', \{{../type}})"/></li>
@@ -104,10 +105,11 @@
         return localStorage.getItem(`${key}-${type}`);
     });
     Handlebars.registerHelper('formatCurrency', function(amount) {
-        return new Handlebars.SafeString(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount * 1000));
+        return new Handlebars.SafeString(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount));
     });
     var monanIdSelected = [];
     var sanphamIdSelected = [];
+    var monan = [];
     var sanpham = [];
     $(document).ready(function() {
         for(let i = 0; i < localStorage.length;i++){
@@ -127,6 +129,7 @@
                 var result = data.filter(item => {
                     return monanIdSelected.includes(item.mamon)
                 });
+                monan = result;
                 var source = $('#monan-template').html();
                 var template = Handlebars.compile(source);
                 $('#list-product').append(template({data: result, type: 0}));
@@ -169,22 +172,16 @@
         let isChange = false;
         if(input.value.length === 0){
             input.value = '1';
-            isChange = true;
-        }else {
-            let value = input.value
-            if(/^[0-9]+$/.test(value)){
-                isChange = true;
-            }else {
-                input.value = value.replace(/[^0-9]/g, '');
-            }
         }
-        if(isChange){
-            if(input.value == 0 && !removeProductBtn(key,type)){
-                input.value = '1';
-            }
-            localStorage.setItem(`${key}-${type}`, input.value);
-            updateTotalCost();
+        let value = input.value
+        input.value = value.replace(/[^0-9]/g, '');
+        if(input.value == 0 && !removeProductBtn(key,type)){
+            input.value = '1';
         }
+        if(type == 1 && parseInt(input.value) > parseInt($(`#quantity-${key}`).html()))
+            input.value = $(`#quantity-${key}`).html();
+        localStorage.setItem(`${key}-${type}`, input.value);
+        updateTotalCost();
     }
     function increaseQuantityBtn(key, type){
         var inputElement = $(`#card-${key} input`)[0];
@@ -199,11 +196,11 @@
     function updateTotalCost(){
         let cost = 0;
         cost = monanIdSelected.reduce((res, item) =>{
-            return res + 25 * parseInt(localStorage.getItem(`${item}-0`));
+            return res + parseInt(localStorage.getItem(`${item}-0`)) * monan[monan.findIndex(obj => obj.mamon == item)].gia;
         }, cost);
         cost = sanphamIdSelected.reduce((res, item) =>{
             return res + parseInt(localStorage.getItem(`${item}-1`)) * sanpham[sanpham.findIndex(obj => obj.masanpham == item)].giaca;
         }, cost);
-        $('#totalAmount').html(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cost * 1000));       
+        $('#totalAmount').html(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cost));       
     }
 </script>

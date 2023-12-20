@@ -29,9 +29,9 @@ const handlebars = require('express-handlebars');
 app.engine('hbs', handlebars.engine({
     extname: '.hbs',
     helpers: {
-        eq: (a ,b) => a === b,
+        eq: (a ,b) => a == b,
         sum: (a, b) => a + b,
-        formatCurrency: a => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount * 1000)
+        formatCurrency: amount => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount)
     }
 }))
 app.set("view engine", "hbs");

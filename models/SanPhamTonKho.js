@@ -1,13 +1,14 @@
 const db = require('../utilities/db');
 const tbName = 'sanphamtonkho';
 module.exports = class SanPhamTonKho{
-    constructor({masanpham,tensanpham,photo,soluong,giaca,loaisanpham}){
+    constructor({masanpham,tensanpham,photo,soluong,giaca,loaisanpham, mota}){
         this.masanpham = masanpham; 
         this.tensanpham = tensanpham; 
         this.photo = photo; 
         this.soluong = soluong;
         this.giaca = giaca; 
         this.loaisanpham = loaisanpham;
+        this.mota = mota;
     }
     static async getAll(){
         return await db.many(`
