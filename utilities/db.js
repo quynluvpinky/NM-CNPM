@@ -28,6 +28,7 @@ const cn = {
 const db = pgp(cn);
 
 module.exports = {
+    db: db,
 	createDatabase: async () => {
         await tempDB.oneOrNone('SELECT 1 FROM pg_database WHERE datname = $1', [myDB])
             .then(result => {
@@ -49,7 +50,6 @@ module.exports = {
                 console.log("database already exist");
             })
     },
-    db: db,
 	getDonHang: async () => {
 		const rs = await db.manyOrNone('SELECT TENSANPHAM, CHITIETMUAHANG.SOLUONGSANPHAM, SUM(SOLUONGSANPHAM*GIACA) AS TONGTIEN FROM CHITIETMUAHANG INNER JOIN SANPHAMTONKHO ON CHITIETMUAHANG.MASANPHAM = SANPHAMTONKHO.MASANPHAM GROUP BY TENSANPHAM,CHITIETMUAHANG.SOLUONGSANPHAM');
 		console.log(rs);
