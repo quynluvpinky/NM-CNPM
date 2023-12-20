@@ -10,8 +10,7 @@ class SiteController{
     // [GET] /:  
     async xu_li_don_dat_hang(req, res, next) {
         try {
-            const donphanan = await 
-            const donhang = await hanghoaM.getAllDonHang();
+            const donhang = await await db.manyOrNone('SELECT TENSANPHAM,PHOTO, CHITIETMUAHANG.SOLUONGSANPHAM, SUM(SOLUONGSANPHAM*GIACA) AS TONGTIEN FROM CHITIETMUAHANG INNER JOIN SANPHAMTONKHO ON CHITIETMUAHANG.MASANPHAM = SANPHAMTONKHO.MASANPHAM GROUP BY TENSANPHAM,CHITIETMUAHANG.SOLUONGSANPHAM,PHOTO');
             res.render('xu_li_don_dat_hang', {donhang: donhang});
         }
         catch (e) {
@@ -25,7 +24,16 @@ class SiteController{
     // [GET] /:  
     async kiem_tra_kho(req, res, next) {
         try {
-            const hangtonkho = await hanghoaM.getSanPhamTonKho();
+            const hangtonkho = await db.manyOrNone(`SELECT 
+            SANPHAMTONKHO.MASANPHAM,
+            SANPHAMTONKHO.TENSANPHAM,
+            SANPHAMTONKHO.PHOTO,
+            SANPHAMTONKHO.SOLUONG,
+            LOAISANPHAM.TENLOAI
+        FROM 
+            SANPHAMTONKHO
+        INNER JOIN 
+            LOAISANPHAM ON SANPHAMTONKHO.LOAISANPHAM = LOAISANPHAM.MALOAI`)
             console.log(hangtonkho);
             res.render('kiem_tra_kho', {hangtonkho: hangtonkho});
         }
