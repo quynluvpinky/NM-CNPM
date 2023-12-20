@@ -1,1 +1,183 @@
-<h1>Home</h1>
+<head>
+    <link rel="stylesheet" href="user/css/home.css">
+</head>
+<main>
+    <div class="container">
+        <div class="row border-bottom">
+            <h2 class="fw-light">Thực đơn chính</h2>
+        </div>
+        <div id="monan-content" class="row gy-3">
+        </div>
+        <div id="monan-pagi" class="row">
+        </div>
+        <div class="row border-bottom">
+            <h2 class="fw-light">Nước giải khát & Bánh</h2>
+        </div>
+        <div id="sanpham-content" class="row gy-3">
+        </div>
+        <div id="sanpham-pagi" class="row">
+        </div>
+        
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Đã thêm vào giỏ hàng</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<head>
+    <script id="monan-template" type="text/x-handlebars-template">
+        \{{#each monan.data}}
+        <div class="col-6 col-md-3">
+            <div class="card border border-black position-relative">
+                <a href="/detail/0/\{{this.mamon}}">
+                    <img src="\{{this.photo}}" class="card-img-top" alt="Product Image">
+                </a>
+                <div class="card-body border-top border-black">
+                    <h6 class="card-title text-center">\{{this.tenmon}}</h6>
+                    <div class="d-flex justify-content-between">
+                    </div>
+                </div>
+                <p class="price position-absolute" style="margin-right: auto;">Giá: \{{formatCurrency 25}}</p>
+                <button type="button" 
+                    class="position-absolute btn btn-primary rounded-circle"
+                    onclick="addProduct('\{{this.mamon}}', 0)">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        \{{/each}}
+    </script>
+    <script id="monan-pagi-template" type="text/x-handlebars-template">
+                
+        <nav aria-label="...">
+            <ul class="pagination justify-content-center align-items-center">
+                <li class="page-item">
+                    <a type="button" class="page-link" onclick="fetchMonAn((\{{total_pages}} + \{{page}} - 2) % \{{total_pages}} + 1)" aria-label="Previous">
+                        &laquo;
+                    </a>
+                </li>
+                \{{#each pagi}} 
+                    <li class="page-item \{{#if (eq ../page this)}} active \{{/if}}">
+                        <a type="button" class="page-link" onclick="fetchMonAn(\{{this}})" >\{{this}}</a>
+                    </li>
+                \{{/each}}
+                <li class="page-item">
+                    <a type="button" class="page-link" onclick="fetchMonAn(\{{page}} % \{{total_pages}} + 1)" aria-label="Next">
+                        &raquo;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </script>
+    <script id="sanpham-template" type="text/x-handlebars-template">
+        \{{#each sanphamtonkho.data}}
+        <div class="col-6 col-md-3">
+            <div class="card border border-black position-relative">
+                <a href="/detail/1/\{{this.masanpham}}">
+                    <img src="\{{this.photo}}" class="card-img-top" alt="Product Image">
+                </a>
+                <div class="card-body border-top border-black">
+                    <h6 class="card-title text-center">\{{this.tensanpham}}</h6>
+                    <p class="card-text">Loại sản phẩm: \{{this.tenloai}}</p>
+                </div>
+                <p class="price position-absolute" style="margin-right: auto;">Giá: \{{formatCurrency this.giaca}}</p>
+                <button type="button" 
+                    class="position-absolute btn btn-primary rounded-circle"
+                    onclick="addProduct('\{{this.masanpham}}', 1)">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        \{{/each}}
+    </script>
+    <script id="sanpham-pagi-template" type="text/x-handlebars-template">
+        <nav aria-label="...">
+            <ul class="pagination justify-content-center align-items-center">
+                <li class="page-item">
+                    <a type="button" class="page-link" onclick="fetchSanPhamTonKho((\{{total_pages}} + \{{page}} - 2) % \{{total_pages}} + 1)" aria-label="Previous">
+                        &laquo;
+                    </a>
+                </li>
+                \{{#each pagi}} 
+                    <li class="page-item \{{#if (eq ../page this)}} active \{{/if}}">
+                        <a type="button" class="page-link" onclick="fetchSanPhamTonKho(\{{this}})" >\{{this}}</a>
+                    </li>
+                \{{/each}}
+                <li class="page-item">
+                    <a type="button" class="page-link" onclick="fetchSanPhamTonKho(\{{page}} % \{{total_pages}} + 1)" aria-label="Next">
+                        &raquo;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </script>
+</head>
+<script>
+    Handlebars.registerHelper('toString', function(obj){
+        return JSON.stringify(obj);
+    });
+    Handlebars.registerHelper('formatCurrency', function(amount) {
+        return new Handlebars.SafeString(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount * 1000));
+    });
+    Handlebars.registerHelper('eq', function(arg1, arg2) {
+        return (arg1 == arg2);
+    });
+    $(document).ready(function() {
+        fetchMonAn(1);
+        fetchSanPhamTonKho(1);
+        
+    })    
+    function fetchMonAn(page){
+        var apiEndPoint = `/data/monan/changePage?page=${page}&per_page=8`
+        $.ajax({
+            url: apiEndPoint,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var source = $('#monan-template').html();
+                var template = Handlebars.compile(source);
+                $('#monan-content').html(template({monan: data}));
+                
+                var arr = [];
+                for(let i = 1; i <= data.total_pages;i++)arr.push(i);
+                source = $('#monan-pagi-template').html();
+                template = Handlebars.compile(source);
+                $('#monan-pagi').html(template({page:data.page, pagi: arr, total_pages: data.total_pages}));
+            }
+        })
+    }
+    function fetchSanPhamTonKho(page){
+        var apiEndPoint = `/data/sanphamtonkho/changePage?page=${page}&per_page=8`
+        $.ajax({
+            url: apiEndPoint,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var source = $('#sanpham-template').html();
+                var template = Handlebars.compile(source);
+                $('#sanpham-content').html(template({sanphamtonkho: data}));
+                
+                var arr = [];
+                for(let i = 1; i <= data.total_pages;i++)arr.push(i);
+                source = $('#sanpham-pagi-template').html();
+                template = Handlebars.compile(source);
+                $('#sanpham-pagi').html(template({page:data.page, pagi: arr, total_pages: data.total_pages}));
+            }
+        })
+    }
+    function addProduct(key,type){
+        let value = window.localStorage.getItem(`${key}-${type}`);
+        if(value !== null){
+            value = parseInt(value) + 1;
+            window.localStorage.setItem(`${key}-${type}`, value);
+        }else {
+            window.localStorage.setItem(`${key}-${type}`, 1);
+        }
+        bootstrap.Toast.getOrCreateInstance($('#liveToast')).show();
+    }
+
+</script>

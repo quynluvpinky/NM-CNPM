@@ -1,17 +1,17 @@
-.name {
+header .name {
     background-image: url('../images/header_background.jpg');
     background-size: cover;
     height: 27vw;
     padding-left: 50px;
 }
 
-p {
+header p {
     color: white;
     font-size: 3em;
     font-weight: bold;
 }
 
-a:hover {
+header a:hover {
     background: rgb(78, 95, 109);
     box-shadow: 0 0 10px rgb(78, 95, 109);
 }

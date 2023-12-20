@@ -1,34 +1,94 @@
 require('dotenv').config();
-const myDB = process.env.myDB;     //db21538
+// mọi truy vấn đều lowercase
 const pgp = require('pg-promise')({
-    capSQL: true
+	capSQL: true
+})
+// [db] Kết nối đến database của bạn
+const db = pgp({
+	host: process.env.DB_HOST,
+	port: process.env.DB_PORT,
+	database: process.env.DB_DB,
+	user: process.env.DB_USER,
+	password: process.env.DB_PW,
 });
-const {QueryFile} = require('pg-promise');
-const path = require('path');
-const { create } = require('domain');
 
-//Tạo một kết nối tạm thời đến database postgres để tạo database mới 'db21538'
-const tempCN = {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW
-}
-const tempDB = pgp(tempCN);
+/* ************************************************************************************* */
+// LƯU Ý: PHẢI CÓ postgres_db thì mới sử dụng được các hàm [postgres_db]
+// [postgres_db] Kết nối đến postgres
+const postgres_db = pgp({
+	host: process.env.DB_HOST,
+	port: process.env.DB_PORT,
+	database: 'postgres',
+	user: process.env.DB_USER,
+	password: process.env.DB_PW,
+});
 
-// Kết nối đến database 'db21538' sau khi tạo xong
-const cn = {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.myDB,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW
+// [postgres_db] Hàm tạo database
+async function createDatabase(databaseName) {
+	try {
+		await postgres_db.none(`CREATE DATABASE ${databaseName}`);
+		console.log(`Database ${databaseName} created successfully`);
+	} catch (error) {
+		console.error('Error creating database', error);
+	}
 }
-const db = pgp(cn);
+
+// [postgres_db] Hàm kiểm tra sự tồn tại của database
+async function checkDatabaseExists(databaseName) {
+	try {
+		// LƯU Ý: [databaseName] không được đổi thành chữ thường dù có (capSQL: true) -> lỗi
+		const result = await postgres_db.oneOrNone('SELECT 1 FROM pg_database WHERE datname = $1', [databaseName]);
+		return !!result;
+	} catch (error) {
+		console.error('Error checking database existence', error);
+		return false;
+	}
+}
+/* ************************************************************************************* */
+
+
+
+// Hàm chính 
+async function main() {
+	// LƯU Ý: [databaseName] không được đổi thành chữ thường dù có (capSQL: true) -> lỗi
+	// vì vậy DB_DB phải là lowercase
+	const databaseName = process.env.DB_DB;
+
+	try {
+		// postgres_db
+		/*******************************************************************/
+		const databaseExists = await checkDatabaseExists(databaseName);
+
+		// tạo database nếu chưa có 
+		if (databaseExists) {
+			console.log('Database already exists.');
+		} else {
+			await createDatabase(databaseName);
+			// init database db
+			const fs = require('fs');
+			const path = require('path')
+			const sqlFile = fs.readFileSync(path.join(__dirname, '..', 'data', 'QLCANTIN.sql'), 'utf8');
+			try {
+				// db
+				await db.query(sqlFile);
+				console.log('Database initialized successfully.');
+			} catch (error) {
+				console.error('Error initializing database:', error); 
+			}
+		}
+		/*******************************************************************/
+
+	} finally {
+		// pgp.end(); 
+	}
+}
+
+// Gọi hàm chính
+main();
 
 module.exports = {
-	createDatabase: async () => {
+    db: db,
+    createDatabase: async () => {
         await tempDB.oneOrNone('SELECT 1 FROM pg_database WHERE datname = $1', [myDB])
             .then(result => {
                 if (result) {
@@ -49,10 +109,21 @@ module.exports = {
                 console.log("database already exist");
             })
     },
-    db: db,
 	getDonHang: async () => {
-		const rs = await db.manyOrNone('SELECT TENSANPHAM, CHITIETMUAHANG.SOLUONGSANPHAM, SUM(SOLUONGSANPHAM*GIACA) AS TONGTIEN FROM CHITIETMUAHANG INNER JOIN SANPHAMTONKHO ON CHITIETMUAHANG.MASANPHAM = SANPHAMTONKHO.MASANPHAM GROUP BY TENSANPHAM,CHITIETMUAHANG.SOLUONGSANPHAM');
-		console.log(rs);
+		const rs = await db.manyOrNone('SELECT TENSANPHAM,PHOTO, CHITIETMUAHANG.SOLUONGSANPHAM, SUM(SOLUONGSANPHAM*GIACA) AS TONGTIEN FROM CHITIETMUAHANG INNER JOIN SANPHAMTONKHO ON CHITIETMUAHANG.MASANPHAM = SANPHAMTONKHO.MASANPHAM GROUP BY TENSANPHAM,CHITIETMUAHANG.SOLUONGSANPHAM,PHOTO');
 		return rs;
-	}
+	},
+    getSanPhamTonKho: async() => {
+        const rs = await db.manyOrNone(`SELECT 
+        SANPHAMTONKHO.MASANPHAM,
+        SANPHAMTONKHO.TENSANPHAM,
+        SANPHAMTONKHO.PHOTO,
+        SANPHAMTONKHO.SOLUONG,
+        LOAISANPHAM.TENLOAI
+    FROM 
+        SANPHAMTONKHO
+    INNER JOIN 
+        LOAISANPHAM ON SANPHAMTONKHO.LOAISANPHAM = LOAISANPHAM.MALOAI`)
+        return rs;
+    }
 }
