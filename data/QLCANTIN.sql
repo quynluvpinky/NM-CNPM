@@ -90,6 +90,10 @@ INSERT INTO productOrder (orderID, itemID, quantity) VALUES
     (1, 'SP01', 1),
     (2, 'SP02', 3);
 
+INSERT INTO productOrder (orderID, itemID, quantity) VALUES
+    (1, 'SP01', 1),
+    (2, 'SP02', 3);
+
 INSERT INTO stockChange (date, itemID, quantity) VALUES
     ('2023-12-20', 'SP01', -2),
     ('2023-12-21', 'SP02', 3);
