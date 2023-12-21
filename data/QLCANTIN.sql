@@ -18,15 +18,16 @@ CREATE TABLE product (
 
 -- Tạo bảng order
 CREATE TABLE "order" (
-    orderID INT PRIMARY KEY,
+    orderID SERIAL PRIMARY KEY,
     date DATE NOT NULL,
     clientName VARCHAR(255) NOT NULL,
-    clientPhone VARCHAR(20) NOT NULL
+    clientPhone VARCHAR(20) NOT NULL,
+    isPurchased BOOLEAN
 );
 
 -- Tạo bảng foodOrder
 CREATE TABLE foodOrder (
-    orderID INT,
+    orderID INT REFERENCES "order"(orderID),
     itemID char(4) REFERENCES food(itemID),
     quantity INT NOT NULL,
     PRIMARY KEY (orderID, itemID)
@@ -34,18 +35,10 @@ CREATE TABLE foodOrder (
 
 -- Tạo bảng productOrder
 CREATE TABLE productOrder (
-    orderID INT,
+    orderID INT REFERENCES "order"(orderID),
     itemID char(4) REFERENCES product(itemID),
     quantity INT NOT NULL,
     PRIMARY KEY (orderID, itemID)
-);
-
--- Tạo bảng handledOrder
-CREATE TABLE handledOrder (
-    orderID INT PRIMARY KEY,
-    date DATE NOT NULL,
-    clientName VARCHAR(255) NOT NULL,
-    clientPhone VARCHAR(20) NOT NULL
 );
 
 -- Tạo bảng stockChange
@@ -60,38 +53,6 @@ CREATE TABLE admin (
     "username" VARCHAR(255) PRIMARY KEY,
     password VARCHAR(255)
 );
-
-
--- Tạo trigger trước khi insert vào bảng orders
-CREATE OR REPLACE FUNCTION set_order_id()
-RETURNS TRIGGER AS $$
-DECLARE
-    max_order_id INTEGER;
-BEGIN
-    -- Lấy giá trị lớn nhất của orderID từ cả hai bảng orders và handledOrder
-    SELECT COALESCE(MAX(orderID), 0) + 1 INTO max_order_id
-    FROM (
-        SELECT orderID FROM "order"
-        UNION ALL
-        SELECT orderID FROM handledOrder
-    ) AS combined;
-
-    NEW.orderID := max_order_id;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Tạo trigger cho bảng orders
-CREATE TRIGGER set_order_id_trigger
-BEFORE INSERT ON "order"
-FOR EACH ROW
-EXECUTE FUNCTION set_order_id();
-
-
--- dù người dùng có nhập orderID bảng orders kiểu gì cũng sẽ bị trigger trên thiết lập lại
-REVOKE INSERT (orderID) ON TABLE "order" FROM PUBLIC;
-
-
 
 -- Insert dữ liệu mẫu
 INSERT INTO food (itemID, name, photo, price, quantity) VALUES
@@ -117,6 +78,9 @@ INSERT INTO product (itemID, name, photo, price, quantity) VALUES
     ('SP09', 'Milo', 'https://drive.google.com/uc?export=view&id=1NOat7pJHEnQO9RxA3OrwrkJ8vVsXHp4K', 6000, 20),
     ('SP10', 'Vinamilk', 'https://drive.google.com/uc?export=view&id=1Hvej_IZUzgTOwXsspBD56CcYMbj1QNor', 7000, 20);
 
+INSERT INTO "order" (date, clientName, clientPhone, isPurchased) VALUES
+    ('2023-12-20', 'Nguyen Van A', '0123456789', TRUE),
+    ('2023-12-21', 'Tran Thi B', '0987654321', FALSE);
 
 INSERT INTO foodOrder (orderID, itemID, quantity) VALUES
     (1, 'MA01', 2),
@@ -126,9 +90,6 @@ INSERT INTO productOrder (orderID, itemID, quantity) VALUES
     (1, 'SP01', 1),
     (2, 'SP02', 3);
 
-INSERT INTO handledOrder (orderID, date, clientName, clientPhone) VALUES
-    (1, '2023-12-20', 'Nguyen Van A', '0123456789'),
-    (2, '2023-12-21', 'Tran Thi B', '0987654321');
 
 INSERT INTO stockChange (date, itemID, quantity) VALUES
     ('2023-12-20', 'SP01', -2),
