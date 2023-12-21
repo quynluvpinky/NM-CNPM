@@ -22,7 +22,7 @@ CREATE TABLE "order" (
     date DATE NOT NULL,
     clientName VARCHAR(255) NOT NULL,
     clientPhone VARCHAR(20) NOT NULL,
-    isPurchased BOOLEAN
+    order_status varchar(15) CHECK (order_status IN ('purchased', 'not purchased', 'deleted'))
 );
 
 -- Tạo bảng foodOrder
@@ -78,17 +78,13 @@ INSERT INTO product (itemID, name, photo, price, quantity) VALUES
     ('SP09', 'Milo', 'https://drive.google.com/uc?export=view&id=1NOat7pJHEnQO9RxA3OrwrkJ8vVsXHp4K', 6000, 20),
     ('SP10', 'Vinamilk', 'https://drive.google.com/uc?export=view&id=1Hvej_IZUzgTOwXsspBD56CcYMbj1QNor', 7000, 20);
 
-INSERT INTO "order" (date, clientName, clientPhone, isPurchased) VALUES
-    ('2023-12-20', 'Nguyen Van A', '0123456789', TRUE),
-    ('2023-12-21', 'Tran Thi B', '0987654321', FALSE);
+INSERT INTO "order" (date, clientName, clientPhone, order_status) VALUES
+    ('2023-12-20', 'Nguyen Van A', '0123456789', 'purchased'),
+    ('2023-12-21', 'Tran Thi B', '0987654321', 'not purchased');
 
 INSERT INTO foodOrder (orderID, itemID, quantity) VALUES
     (1, 'MA01', 2),
     (2, 'MA02', 1);
-
-INSERT INTO productOrder (orderID, itemID, quantity) VALUES
-    (1, 'SP01', 1),
-    (2, 'SP02', 3);
 
 INSERT INTO productOrder (orderID, itemID, quantity) VALUES
     (1, 'SP01', 1),
