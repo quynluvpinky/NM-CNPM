@@ -6,9 +6,6 @@ const db = require('./utilities/db')
 // create express app
 const app = express();
 
-//create database
-db.createDatabase();
-
 // middleware
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); // mọi yêu cầu tĩnh trong public được xử lý trước khi qua route khác
