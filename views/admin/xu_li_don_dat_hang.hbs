@@ -1,1 +1,32 @@
-<h1>xu_li_don_dat_hang</h1>
+
+{{#each donhang}}
+<div class="order-container m-3 p-3 bg-light rounded">
+    <div class="row">
+            <div class="col-2">
+                <img class="order-img rounded" src="{{photo}}" alt="...">
+            </div>
+            <div class="col-7 d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-around">
+                    <h5 class="h2">{{tensanpham}}</h5>
+                    <p>Số lượng: {{soluongsanpham}}</p>
+                </div>
+                <div class="d-flex flex-column justify-content-center">
+                    <h3>{{tongtien}} đ</h3>
+                </div>
+            </div>
+            <div class="col-3 d-flex flex-column justify-content-around align-item-center px-5">
+                <button type="button" class="btn btn-primary ">Xác nhận</button>
+                <button type="button" class="btn btn-danger">Hủy</button>
+            </div>
+    </div>
+</div>
+{{/each}}
+
+<style>
+    .order-img {
+        width: 100%;
+    }
+    .order-containter {
+        background-color: white;
+    }
+</style>
