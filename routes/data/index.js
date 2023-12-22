@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const MonAn = require('./MonAn');
-const SanPhamTonKho = require('./SanPhamTonKho');
-
-router.use('/monan', MonAn);
-router.use('/sanphamtonkho', SanPhamTonKho);
-
+const Food = require('./Food');
+const Product = require('./Product');
+router.use('/food', Food);
+router.use('/product',Product);
 module.exports = router;

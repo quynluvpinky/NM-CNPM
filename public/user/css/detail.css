@@ -1,0 +1,7 @@
+main .container > .row {
+    max-width: 65em;
+    margin: 0 auto !important;
+}
+main .card {
+    border: 0;
+}
