@@ -11,7 +11,7 @@ router.get('/nhap_xuat_hang', siteController.nhap_xuat_hang);
 router.get('/kiem_tra_kho', siteController.kiem_tra_kho);
 router.get('/bao_cao_doanh_thu', siteController.bao_cao_doanh_thu);
 router.get('/chi_tieu_cac_mon', siteController.chi_tieu_cac_mon);
-router.get('./logout', siteController.logout);
+router.get('/logout', siteController.logout);
 router.get('/', siteController.index)
 
 module.exports = router; 

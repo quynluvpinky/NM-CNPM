@@ -115,7 +115,9 @@ class SiteController {
     }
     // [GET] /:  
     logout(req, res) {
-        res.render('logout')
+        req.session.destroy(err => {
+            res.redirect('/');
+        })
     }
 
 }
