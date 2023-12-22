@@ -12,27 +12,25 @@
             </nav>
         </div>
         <div class="row">
-            <div id="card-{{id}}" class="card mb-3 position-relative product">
-                <div class="d-none" id="Id-Type-Obj">{{id}}-{{type}}</div>
+            <div id="card-{{data.itemid}}" class="card mb-3 position-relative product">
+                <div class="d-none" id="Id-Type-Obj">{{data.itemid}}-{{type}}</div>
                 <div class="row g-0">
                     <div class="col-md-4 col-12">
-                        <img src="{{photo}}" class="img-fluid rounded-start" alt="...">
+                        <img src="{{data.photo}}" class="img-fluid rounded-start" alt="...">
                     </div>
                     <div class="col-md-8 col-12">
                         <div class="card-body">
-                            <h5 class="card-title text-center">{{name}}</h5>
-                            <p class="card-text">Giá: {{formatCurrency price}}</p>
-                            <p class="card-text">Mô tả: {{description}}</p>
+                            <h5 class="card-title text-center">{{data.name}}</h5>
+                            <p class="card-text">Giá: {{formatCurrency data.price}}</p>
+                            <p class="card-text">Mô tả: {{data.description}}</p>
                             <ul class="pagination align-items-center">
                                 Số lượng mua:
-                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('{{id}}', {{type}})"><i class="fas fa-minus"></i></a></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('{{data.itemid}}', {{type}})"><i class="fas fa-minus"></i></a></li>
                                 <li class="page-item"><input class="page-link text-center" type="tel" 
-                                    style="width: 50px;" oninput="changeQuantity(this, '{{id}}', {{type}})"/></li>
-                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('{{id}}', {{type}})"><i class="fas fa-plus"></i></a></li>
+                                    style="width: 50px;" oninput="changeQuantity(this, '{{data.itemid}}', {{type}})"/></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('{{data.itemid}}', {{type}})"><i class="fas fa-plus"></i></a></li>
                             </ul>
-                            {{#if (eq type 1)}}
-                            <p class="card-text">Số hàng tồn: <span id="quantity-{{id}}">{{count}}</span></p>
-                            {{/if}}
+                            <p class="card-text">Số hàng tồn: <span id="quantity-{{data.itemid}}">{{data.quantity}}</span></p>
                         </div>
                     </div>
                 </div>
@@ -74,7 +72,7 @@
             localStorage.removeItem(`${id}-${type}`);
         }
         else {
-            if(type == 1 && parseInt(input.value) > parseInt($(`#quantity-${id}`).html())){
+            if(parseInt(input.value) > parseInt($(`#quantity-${id}`).html())){
                 input.value = parseInt($(`#quantity-${id}`).html())
             }
             localStorage.setItem(`${id}-${type}`, input.value);

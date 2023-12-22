@@ -13,16 +13,16 @@
         <div class="row border-bottom">
             <h2 class="fw-light">Thực đơn chính</h2>
         </div>
-        <div id="monan-content" class="row gy-3">
+        <div id="food-content" class="row gy-3">
         </div>
-        <div id="monan-pagi" class="row">
+        <div id="food-pagi" class="row">
         </div>
         <div class="row border-bottom">
             <h2 class="fw-light">Nước giải khát & Bánh</h2>
         </div>
-        <div id="sanpham-content" class="row gy-3">
+        <div id="product-content" class="row gy-3">
         </div>
-        <div id="sanpham-pagi" class="row">
+        <div id="product-pagi" class="row">
         </div>
         
         <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -36,86 +36,84 @@
     </div>
 </main>
 <head>
-    <script id="monan-template" type="text/x-handlebars-template">
-        \{{#each monan.data}}
+    <script id="food-template" type="text/x-handlebars-template">
+        \{{#each food.data}}
         <div class="col-6 col-md-3">
             <div class="card border border-black position-relative">
-                <a href="/detail?type=0&id=\{{this.mamon}}">
+                <a href="/detail?type=0&id=\{{this.itemid}}">
                     <img src="\{{this.photo}}" class="card-img-top" alt="Product Image">
                 </a>
                 <div class="card-body border-top border-black">
-                    <h6 class="card-title text-center">\{{this.tenmon}}</h6>
+                    <h6 class="card-title text-center">\{{this.name}}</h6>
                     <div class="d-flex justify-content-between">
                     </div>
                 </div>
-                <p class="price position-absolute" style="margin-right: auto;">Giá: \{{formatCurrency this.gia}}</p>
+                <p class="price position-absolute" style="margin-right: auto;">Giá: \{{formatCurrency this.price}}</p>
                 <button type="button" 
                     class="position-absolute btn btn-primary rounded-circle"
-                    onclick="addProduct('\{{this.mamon}}', 0)">
+                    onclick="addProduct('\{{this.itemid}}', 0)">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
         </div>
         \{{/each}}
     </script>
-    <script id="monan-pagi-template" type="text/x-handlebars-template">
-                
+    <script id="food-pagi-template" type="text/x-handlebars-template">
         <nav aria-label="...">
             <ul class="pagination justify-content-center align-items-center">
                 <li class="page-item">
-                    <a type="button" class="page-link" onclick="fetchMonAn((\{{total_pages}} + \{{page}} - 2) % \{{total_pages}} + 1)" aria-label="Previous">
+                    <a type="button" class="page-link" onclick="fetchFood((\{{total_pages}} + \{{page}} - 2) % \{{total_pages}} + 1)" aria-label="Previous">
                         &laquo;
                     </a>
                 </li>
                 \{{#each pagi}} 
                     <li class="page-item \{{#if (eq ../page this)}} active \{{/if}}">
-                        <a type="button" class="page-link" onclick="fetchMonAn(\{{this}})" >\{{this}}</a>
+                        <a type="button" class="page-link" onclick="fetchFood(\{{this}})" >\{{this}}</a>
                     </li>
                 \{{/each}}
                 <li class="page-item">
-                    <a type="button" class="page-link" onclick="fetchMonAn(\{{page}} % \{{total_pages}} + 1)" aria-label="Next">
+                    <a type="button" class="page-link" onclick="fetchFood(\{{page}} % \{{total_pages}} + 1)" aria-label="Next">
                         &raquo;
                     </a>
                 </li>
             </ul>
         </nav>
     </script>
-    <script id="sanpham-template" type="text/x-handlebars-template">
-        \{{#each sanphamtonkho.data}}
+    <script id="product-template" type="text/x-handlebars-template">
+        \{{#each product.data}}
         <div class="col-6 col-md-3">
             <div class="card border border-black position-relative">
-                <a href="/detail?type=1&id=\{{this.masanpham}}">
+                <a href="/detail?type=1&id=\{{this.itemid}}">
                     <img src="\{{this.photo}}" class="card-img-top" alt="Product Image">
                 </a>
                 <div class="card-body border-top border-black">
-                    <h6 class="card-title text-center">\{{this.tensanpham}}</h6>
-                    <p class="card-text">Loại sản phẩm: \{{this.tenloai}}</p>
+                    <h6 class="card-title text-center">\{{this.name}}</h6>
                 </div>
-                <p class="price position-absolute" style="margin-right: auto;">Giá: \{{formatCurrency this.giaca}}</p>
+                <p class="price position-absolute" style="margin-right: auto;">Giá: \{{formatCurrency this.price}}</p>
                 <button type="button" 
                     class="position-absolute btn btn-primary rounded-circle"
-                    onclick="addProduct('\{{this.masanpham}}', 1)">
+                    onclick="addProduct('\{{this.itemid}}', 1)">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
         </div>
         \{{/each}}
     </script>
-    <script id="sanpham-pagi-template" type="text/x-handlebars-template">
+    <script id="product-pagi-template" type="text/x-handlebars-template">
         <nav aria-label="...">
             <ul class="pagination justify-content-center align-items-center">
                 <li class="page-item">
-                    <a type="button" class="page-link" onclick="fetchSanPhamTonKho((\{{total_pages}} + \{{page}} - 2) % \{{total_pages}} + 1)" aria-label="Previous">
+                    <a type="button" class="page-link" onclick="fetchProduct((\{{total_pages}} + \{{page}} - 2) % \{{total_pages}} + 1)" aria-label="Previous">
                         &laquo;
                     </a>
                 </li>
                 \{{#each pagi}} 
                     <li class="page-item \{{#if (eq ../page this)}} active \{{/if}}">
-                        <a type="button" class="page-link" onclick="fetchSanPhamTonKho(\{{this}})" >\{{this}}</a>
+                        <a type="button" class="page-link" onclick="fetchProduct(\{{this}})" >\{{this}}</a>
                     </li>
                 \{{/each}}
                 <li class="page-item">
-                    <a type="button" class="page-link" onclick="fetchSanPhamTonKho(\{{page}} % \{{total_pages}} + 1)" aria-label="Next">
+                    <a type="button" class="page-link" onclick="fetchProduct(\{{page}} % \{{total_pages}} + 1)" aria-label="Next">
                         &raquo;
                     </a>
                 </li>
@@ -134,45 +132,45 @@
         return (arg1 == arg2);
     });
     $(document).ready(function() {
-        fetchMonAn(1);
-        fetchSanPhamTonKho(1);
+        fetchFood(1);
+        fetchProduct(1);
         
     })    
-    function fetchMonAn(page){
-        var apiEndPoint = `/data/monan/changePage?page=${page}&per_page=8`
+    function fetchFood(page){
+        var apiEndPoint = `/data/food/changePage?page=${page}&per_page=8`
         $.ajax({
             url: apiEndPoint,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
-                var source = $('#monan-template').html();
+                var source = $('#food-template').html();
                 var template = Handlebars.compile(source);
-                $('#monan-content').html(template({monan: data}));
+                $('#food-content').html(template({food: data}));
                 
                 var arr = [];
                 for(let i = 1; i <= data.total_pages;i++)arr.push(i);
-                source = $('#monan-pagi-template').html();
+                source = $('#food-pagi-template').html();
                 template = Handlebars.compile(source);
-                $('#monan-pagi').html(template({page:data.page, pagi: arr, total_pages: data.total_pages}));
+                $('#food-pagi').html(template({page:data.page, pagi: arr, total_pages: data.total_pages}));
             }
         })
     }
-    function fetchSanPhamTonKho(page){
-        var apiEndPoint = `/data/sanphamtonkho/changePage?page=${page}&per_page=8`
+    function fetchProduct(page){
+        var apiEndPoint = `/data/product/changePage?page=${page}&per_page=8`
         $.ajax({
             url: apiEndPoint,
             method: 'GET',
             dataType: 'json',
             success: function(data) {
-                var source = $('#sanpham-template').html();
+                var source = $('#product-template').html();
                 var template = Handlebars.compile(source);
-                $('#sanpham-content').html(template({sanphamtonkho: data}));
+                $('#product-content').html(template({product: data}));
                 
                 var arr = [];
                 for(let i = 1; i <= data.total_pages;i++)arr.push(i);
-                source = $('#sanpham-pagi-template').html();
+                source = $('#product-pagi-template').html();
                 template = Handlebars.compile(source);
-                $('#sanpham-pagi').html(template({page:data.page, pagi: arr, total_pages: data.total_pages}));
+                $('#product-pagi').html(template({page:data.page, pagi: arr, total_pages: data.total_pages}));
             }
         })
     }

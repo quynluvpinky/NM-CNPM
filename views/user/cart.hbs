@@ -15,53 +15,63 @@
             <div class="col-12 col-md-4 order-md-2" id="purchase">
                 <div class="card mb-3 border-black p-2">
                     <div class="text-center"><h2 class="card-title fw-light">Đặt hàng</h2></div>
-                    <form>
+                    <div>
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Họ tên:</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="Nhập họ tên">
+                            <input type="text" class="form-control" name="fullName" id="fullName" placeholder="Nhập họ tên">
                         </div>
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Số điện thoại:</label>
-                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Nhập số điện thoại">
+                            <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="Nhập số điện thoại">
                         </div>
                         <div class="mb-3">
                             <label for="totalAmount" class="form-label">Tổng tiền:</label>
                             <div id="totalAmount" class="form-control" readonly>2000.000</div>
                         </div>
+                        <input type="hidden" id="data" name="data">
                         <button id="purchaseBtn" type="button" class="btn btn-danger">Thanh toán</button>
-                    </form>
+                    </div>
                 </div>
             </div>
             
             <div class="col-12 col-md-8 order-md-1" id="list-product">
             </div>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto" id="toast-purchase">Đặt hàng thành công</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>
 <head>
-    <script id="monan-template"type="text/x-handlebars-template">
+    <script id="food-template"type="text/x-handlebars-template">
         \{{#each data}}
-            <div id="card-\{{this.mamon}}" class="card mb-3 border border-black position-relative product">
+            <div id="card-\{{this.itemid}}" class="card mb-3 border border-black position-relative product">
                 <div class="row g-0">
                     <div class="col-4">
-                        <a href="/detail?type=0&id=\{{this.mamon}}"><img src="\{{this.photo}}" class="img-fluid rounded-start" alt="..."></a>
+                        <a href="/detail?type=0&id=\{{this.itemid}}"><img src="\{{this.photo}}" class="img-fluid rounded-start" alt="..."></a>
                     </div>
                     <div class="col-8">
                         <div class="card-body">
-                            <h5 class="card-title">\{{this.tenmon}}</h5>
-                            <p class="card-text">Giá: \{{formatCurrency this.gia}}</p>
+                            <h5 class="card-title">\{{this.name}}</h5>
+                            <p class="card-text">Giá: \{{formatCurrency this.price}}</p>
+                            <p class="card-text">Số hàng tồn: <span id="quantity-\{{this.itemid}}">\{{this.quantity}}</span></p>
                             <ul class="pagination align-items-center">
                                 Số lượng mua:
-                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.mamon}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.itemid}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
                                 <li class="page-item"><input class="page-link text-center" type="tel" 
-                                    value="\{{localStorageGetItem this.mamon ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.mamon}}', \{{../type}})"/></li>
-                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('\{{this.mamon}}', \{{../type}})"><i class="fas fa-plus"></i></a></li>
+                                    value="\{{localStorageGetItem this.itemid ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.itemid}}', \{{../type}})"/></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('\{{this.itemid}}', \{{../type}})"><i class="fas fa-plus"></i></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <button type="button" class="position-absolute btn btn-danger rounded-circle"
-                    onclick="removeProductBtn('\{{this.mamon}}', \{{../type}})">
+                    onclick="removeProductBtn('\{{this.itemid}}', \{{../type}})">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -70,24 +80,24 @@
     
     
     
-    <script id="sanpham-template"type="text/x-handlebars-template">
+    <script id="product-template"type="text/x-handlebars-template">
         \{{#each data}}
-            <div id="card-\{{this.masanpham}}" class="card mb-3 border border-black position-relative product">
+            <div id="card-\{{this.itemid}}" class="card mb-3 border border-black position-relative product">
                 <div class="row g-0">
                     <div class="col-4">
-                        <a href="/detail?type=1&id=\{{this.masanpham}}"><img src="\{{this.photo}}" class="img-fluid rounded-start" alt="..."></a>
+                        <a href="/detail?type=1&id=\{{this.itemid}}"><img src="\{{this.photo}}" class="img-fluid rounded-start" alt="..."></a>
                     </div>
                     <div class="col-8">
                         <div class="card-body">
-                            <h5 class="card-title">\{{this.tensanpham}}</h5>
-                            <p class="card-text">Giá: \{{formatCurrency this.giaca}}</p>
-                            <p class="card-text">Số hàng tồn: <span id="quantity-\{{this.masanpham}}">\{{this.soluong}}</span></p>
+                            <h5 class="card-title">\{{this.name}}</h5>
+                            <p class="card-text">Giá: \{{formatCurrency this.price}}</p>
+                            <p class="card-text">Số hàng tồn: <span id="quantity-\{{this.itemid}}">\{{this.quantity}}</span></p>
                             <ul class="pagination align-items-center">
                                 Số lượng mua:
-                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.masanpham}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="decreaseQuantityBtn('\{{this.itemid}}', \{{../type}})"><i class="fas fa-minus"></i></a></li>
                                 <li class="page-item"><input class="page-link text-center" type="tel" 
-                                    value="\{{localStorageGetItem this.masanpham ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.masanpham}}', \{{../type}})"/></li>
-                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('\{{this.masanpham}}', \{{../type}})"><i class="fas fa-plus"></i></a></li>
+                                    value="\{{localStorageGetItem this.itemid ../type}}" style="width: 50px;" oninput="changeQuantity(this, '\{{this.itemid}}', \{{../type}})"/></li>
+                                <li class="page-item"><a class="page-link" type="button" onclick="increaseQuantityBtn('\{{this.itemid}}', \{{../type}})"><i class="fas fa-plus"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -107,48 +117,50 @@
     Handlebars.registerHelper('formatCurrency', function(amount) {
         return new Handlebars.SafeString(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount));
     });
-    var monanIdSelected = [];
-    var sanphamIdSelected = [];
-    var monan = [];
-    var sanpham = [];
+    var foodIdSelected = [];
+    var productIdSelected = [];
+    var food = [];
+    var product = [];
     $(document).ready(function() {
         for(let i = 0; i < localStorage.length;i++){
             let key = localStorage.key(i);
             if(key.split('-')[1] == 0){
-                monanIdSelected.push(key.split('-')[0]);
+                foodIdSelected.push(key.split('-')[0]);
             }
             else if(key.split('-')[1] == 1){
-                sanphamIdSelected.push(key.split('-')[0]);
+                productIdSelected.push(key.split('-')[0]);
             }
         }
-        $.ajax({
-            url: `/data/monan`,
+        var req1 = $.ajax({
+            url: `/data/food`,
             method: 'GET', 
             dataType: 'json',
             success: function(data){
                 var result = data.filter(item => {
-                    return monanIdSelected.includes(item.mamon)
+                    return foodIdSelected.includes(item.itemid)
                 });
-                monan = result;
-                var source = $('#monan-template').html();
+                food = result;
+                var source = $('#food-template').html();
                 var template = Handlebars.compile(source);
                 $('#list-product').append(template({data: result, type: 0}));
             }
         })
-        $.ajax({
-            url: `/data/sanphamtonkho`,
+        var req2 = $.ajax({
+            url: `/data/product`,
             method: 'GET', 
             dataType: 'json',
             success: function(data){
                 var result = data.filter(item => {
-                    return sanphamIdSelected.includes(item.masanpham);
+                    return productIdSelected.includes(item.itemid);
                 });
-                sanpham = result;
-                var source = $('#sanpham-template').html();
+                product = result;
+                var source = $('#product-template').html();
                 var template = Handlebars.compile(source);
                 $('#list-product').append(template({data: result, type: 1}));
-                updateTotalCost();
             }
+        })
+        $.when(req1,req2).done(function() {
+            updateTotalCost();
         })
     })
     function removeProductBtn(key, type){
@@ -156,12 +168,12 @@
             localStorage.removeItem(`${key}-${type}`);
             $(`#card-${key}`).remove();
             if(type == 0){
-                let i = monanIdSelected.indexOf(key);
-                if(i !== -1) monanIdSelected.splice(i, 1);
+                let i = foodIdSelected.indexOf(key);
+                if(i !== -1) foodIdSelected.splice(i, 1);
             }
             else if(type == 1){
-                let i = sanphamIdSelected.indexOf(key);
-                if(i !== -1) sanphamIdSelected.splice(i, 1);
+                let i = productIdSelected.indexOf(key);
+                if(i !== -1) productIdSelected.splice(i, 1);
             }
             updateTotalCost();
             return true;
@@ -178,7 +190,7 @@
         if(input.value == 0 && !removeProductBtn(key,type)){
             input.value = '1';
         }
-        if(type == 1 && parseInt(input.value) > parseInt($(`#quantity-${key}`).html()))
+        if(parseInt(input.value) > parseInt($(`#quantity-${key}`).html()))
             input.value = $(`#quantity-${key}`).html();
         localStorage.setItem(`${key}-${type}`, input.value);
         updateTotalCost();
@@ -195,12 +207,47 @@
     }
     function updateTotalCost(){
         let cost = 0;
-        cost = monanIdSelected.reduce((res, item) =>{
-            return res + parseInt(localStorage.getItem(`${item}-0`)) * monan[monan.findIndex(obj => obj.mamon == item)].gia;
+        cost = foodIdSelected.reduce((res, item) =>{
+            return res + parseInt(localStorage.getItem(`${item}-0`)) * food[food.findIndex(obj => obj.itemid == item)].price;
         }, cost);
-        cost = sanphamIdSelected.reduce((res, item) =>{
-            return res + parseInt(localStorage.getItem(`${item}-1`)) * sanpham[sanpham.findIndex(obj => obj.masanpham == item)].giaca;
+        cost = productIdSelected.reduce((res, item) =>{
+            return res + parseInt(localStorage.getItem(`${item}-1`)) * product[product.findIndex(obj => obj.itemid == item)].price;
         }, cost);
         $('#totalAmount').html(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cost));       
     }
+    $('#purchaseBtn').click(function(e){
+        var foodOrders = [];
+        var productOrders = [];
+        for(let i = 0; i < localStorage.length;i++){
+            let key = localStorage.key(i);
+            if(key.split('-')[1] == 0){
+                foodOrders.push({itemid: key.split('-')[0], quantity: localStorage.getItem(key)})
+            }
+            else {
+                productOrders.push({itemid: key.split('-')[0], quantity: localStorage.getItem(key)})
+            }
+        }
+        if(foodOrders.length == 0 || product.length == 0){
+            bootstrap.Toast.getOrCreateInstance($('#liveToast')).show();
+            $('#toast-purchase').html('Giỏ hàng không được để trống');
+            return;
+        }
+        var data = {
+            food: foodOrders,
+            product: productOrders,
+            fullName: $('#fullName')[0].value,
+            phoneNumber: $('#phoneNumber')[0].value
+        };
+        $.ajax({
+            method: 'POST',
+            url:'/purchase',
+            data: data,
+            success:function(res){
+                localStorage.clear();
+                $('#list-product').html('');
+                $('#toast-purchase').html('Đặt hàng thành công');
+                bootstrap.Toast.getOrCreateInstance($('#liveToast')).show();
+            }
+        })
+    })
 </script>

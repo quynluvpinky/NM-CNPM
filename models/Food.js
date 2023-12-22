@@ -1,12 +1,13 @@
 const db = require('../utilities/db');
-const tbName = 'monan';
-module.exports = class MonAn{
-    constructor({mamon, tenmon, photo, gia,mota}){
-        this.mamon = mamon;
-        this.tenmon = tenmon; 
-        this.photo = photo;
-        this.gia = gia;
-        this.mota = mota;
+const tbName = 'food';
+module.exports = class Food{
+    constructor({itemid, name, photo, price,quantity, description}){
+        this.itemid = itemid; 
+        this.name = name; 
+        this.photo = photo; 
+        this.price = price; 
+        this.quantity = quantity; 
+        this.description = description; 
     }
     static async getAll(){
         return await db.many(`
@@ -16,10 +17,10 @@ module.exports = class MonAn{
     static async getOneById(id){
         const res = await db.oneOrNone(`
             SELECT * FROM public."${tbName}"
-            WHERE "mamon" = $1
+            WHERE "itemid" = $1
         `,[id])
         if(res){
-            return new MonAn({...res})
+            return new Food({...res})
         }
         return res;
     }

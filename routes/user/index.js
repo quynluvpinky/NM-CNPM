@@ -8,4 +8,5 @@ router.get('/cart', siteController.cart);
 router.get('/detail', siteController.detail);
 router.get('/', siteController.index);
 router.post('/login', passport.authenticate('myS', { successReturnToOrRedirect: '/admin', failureRedirect: '/login?e=* Tài khoản hoặc mật khẩu không chính xác' }))
+router.post('/purchase', siteController.purchase);
 module.exports = router;
