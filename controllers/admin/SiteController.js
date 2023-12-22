@@ -1,7 +1,7 @@
 const db = require('../../utilities/db')
 const hanghoaM = require('../../models/hanghoaM')
 
-class SiteController{
+class SiteController {
 
     // [GET] /:  
     index(req, res) {
@@ -10,8 +10,39 @@ class SiteController{
     // [GET] /:  
     async xu_li_don_dat_hang(req, res, next) {
         try {
-            const donhang = await await db.manyOrNone('SELECT TENSANPHAM,PHOTO, CHITIETMUAHANG.SOLUONGSANPHAM, SUM(SOLUONGSANPHAM*GIACA) AS TONGTIEN FROM CHITIETMUAHANG INNER JOIN SANPHAMTONKHO ON CHITIETMUAHANG.MASANPHAM = SANPHAMTONKHO.MASANPHAM GROUP BY TENSANPHAM,CHITIETMUAHANG.SOLUONGSANPHAM,PHOTO');
-            res.render('xu_li_don_dat_hang', {donhang: donhang});
+            const donhang = await hanghoaM.getAllDonHang();
+            console.log(donhang);
+            
+            // Tạo mảng mới
+            const newArray = [];
+            const map = new Map();
+
+            for (const item of donhang) {
+                const key = item.orderid + item.date + item.clientname + item.clientphone;
+
+                if (!map.has(key)) {
+                    map.set(key, true);
+
+                    newArray.push({
+                        orderid: item.orderid,
+                        date: item.date,
+                        clientname: item.clientname,
+                        clientphone: item.clientphone,
+                        items: []
+                    });
+                }
+
+                const newItem = {
+                    name: item.name,
+                    photo: item.photo,
+                    quantity: item.quantity,
+                    price: item.price,
+                    total: item.total
+                };
+
+                newArray.find(element => element.orderid === item.orderid).items.push(newItem);
+            }
+            res.render('xu_li_don_dat_hang', { donhang: newArray });
         }
         catch (e) {
             next(e);
@@ -35,7 +66,7 @@ class SiteController{
         INNER JOIN 
             LOAISANPHAM ON SANPHAMTONKHO.LOAISANPHAM = LOAISANPHAM.MALOAI`)
             console.log(hangtonkho);
-            res.render('kiem_tra_kho', {hangtonkho: hangtonkho});
+            res.render('kiem_tra_kho', { hangtonkho: hangtonkho });
         }
         catch (e) {
             next(e);
