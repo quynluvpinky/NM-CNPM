@@ -82,11 +82,12 @@ class SiteController {
         }
     }
 
-    // [GET] /:  
+    ////////////////////NHAP XUAT HANG /////////////////////  
     nhap_xuat_hang(req, res) {
         res.render('nhap_xuat_hang')
     }
-    // [GET] /:  
+    
+    /////////////// KIEM TRA KHO /////////////////////////////
     async kiem_tra_kho(req, res, next) {
         try {
             const hangtonkho = await db.manyOrNone(`SELECT 
