@@ -1,5 +1,5 @@
 const db = require('../../utilities/db')
-const hanghoaM = require('../../models/hanghoaM')
+const donhangM = require('../../models/donhangM')
 
 class SiteController {
 
@@ -10,8 +10,7 @@ class SiteController {
     // [GET] /:  
     async xu_li_don_dat_hang(req, res, next) {
         try {
-            const donhang = await hanghoaM.getAllDonHang();
-            console.log(donhang);
+            const donhang = await donhangM.getAllDonHang();
             
             // Tạo mảng mới
             const newArray = [];
@@ -39,8 +38,21 @@ class SiteController {
                     price: item.price,
                     total: item.total
                 };
-
+                    
                 newArray.find(element => element.orderid === item.orderid).items.push(newItem);
+            }
+            
+            //Thêm thuộc tính final total:
+            for (var i = 0; i < newArray.length; i++) {
+                var currentObject = newArray[i];
+            
+                // Sử dụng reduce để tính tổng các total trong items
+                var sumOfTotal = currentObject.items.reduce(function (accumulator, currentItem) {
+                    return accumulator + parseInt(currentItem.total);
+                }, 0);
+            
+                // Thêm thuộc tính final_total
+                currentObject.final_total = sumOfTotal;
             }
             res.render('xu_li_don_dat_hang', { donhang: newArray });
         }
@@ -48,6 +60,28 @@ class SiteController {
             next(e);
         }
     }
+    async xac_nhan_don_hang(req,res,next) {
+        try {
+            const id = req.body.orderid;
+            donhangM.XacNhanDonHang(id);
+            res.status(200).send('Status: OK');
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+    async huy_don_hang(req,res,next) {
+        try {
+            const id = req.body.orderid;
+            donhangM.HuyDonHang(id);
+            res.status(200).send('Status: OK');
+
+        }
+        catch(e) {
+            next(e)
+        }
+    }
+
     // [GET] /:  
     nhap_xuat_hang(req, res) {
         res.render('nhap_xuat_hang')
@@ -65,7 +99,6 @@ class SiteController {
             SANPHAMTONKHO
         INNER JOIN 
             LOAISANPHAM ON SANPHAMTONKHO.LOAISANPHAM = LOAISANPHAM.MALOAI`)
-            console.log(hangtonkho);
             res.render('kiem_tra_kho', { hangtonkho: hangtonkho });
         }
         catch (e) {

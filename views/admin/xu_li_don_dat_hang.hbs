@@ -1,59 +1,91 @@
 {{#each donhang}}
-<div class="order-container p-1 m-3 rounded">
-    <div class="customer-info">
-        <span>Đơn số: {{orderid}} </span>
-        <span>Tên khách hàng: {{clientname}} </span>
-        <span>Số điện thoại: {{clientphone}}</span>
-        <span>Ngày đặt: {{date}}</span>
+<div class="card order-container p-1 m-2 rounded" style="background-color: rgb(203, 255, 238);">
+    <div class="card-body customer-info fs-3 d-flex justify-content-around">
+        <div class="col-3">
+            <span>{{clientname}} </span>
+        </div>
+        <div class="col-3">
+            <span>{{clientphone}}</span>
+        </div>
+        <div class="col-3">
+            <span>{{final_total}} VND</span>
+        </div>
+        <div class="col-1">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#items{{orderid}}"
+                aria-expanded="false" aria-controls="items{{orderid}}">
+                Chi tiết
+            </button>
+        </div>
+        <div class="col-2">
+            <button id="confirmBtn_{{orderid}}" type="button" class="btn btn-primary " onclick="orderConfirm({{orderid}})">Xác nhận</button>
+            <button id="deniedBtn_{{orderid}}" type="button" class="btn btn-danger" onclick="orderDenied({{orderid}})">Hủy</button>
+        </div>
     </div>
-    {{#each items}}
-    <div class="item-container m-2 p-3 bg-light rounded">
-        <div class="row">
-            <div class="col-1">
-                <img class="item-img rounded" src="{{photo}}" alt="...">
-            </div>
-            <div class="col-11 d-flex justify-content-between">
-                <div class="d-flex flex-column justify-content-around">
-                    <h5 class="h2">{{name}}</h5>
-                    <p>Số lượng: {{quantity}}</p>
+    <div id="items{{orderid}}" class="collapse">
+        {{#each items}}
+        <div class="m-1 p-3 rounded bg-light">
+            <div class="row">
+                <div class="col-1">
+                    <img class="item-img rounded" src="{{photo}}" alt="...">
                 </div>
-                <div class="d-flex flex-column justify-content-center">
-                    <h3>{{total}} đ</h3>
+                <div class="col-11 d-flex justify-content-between">
+                    <div class="d-flex flex-column justify-content-around">
+                        <h5 class="h2">{{name}}</h5>
+                        <span>Số lượng: {{quantity}}</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                        <h3>{{total}} đ</h3>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    {{/each}}
-    <div class="d-flex flex-row-reverse">
-        <button type="button" class="btn btn-primary ">Xác nhận</button>
-        <button type="button" class="btn btn-danger">Hủy</button>
+        {{/each}}
     </div>
 </div>
 {{/each}}
 
 <style>
-    .customer-info span {
-        font-weight: bold;
-        padding: 0 20px;
-    }
-
-    .order-container {
-        background-color: rgb(176, 252, 190);
-    }
-
     .item-img {
         width: 100%;
-    }
-
-    .item-containter {
-        background-color: white;
-    }
+    };
 </style>
 
 <script>
-    $(document).ready({
-        $('#confirm').click({
-
+    function orderConfirm(_orderid) {
+        
+        var confirmID = "#confirmBtn_"+ _orderid;
+        var deniedID = "#deniedBtn_"+ _orderid;
+        fetch('/admin/orderConfirm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({orderid: _orderid})
         })
-    })
+        .then(() => {
+            console.log(confirmID);
+            $(confirmID).html('Đã xác nhận');
+            $(deniedID).prop('hidden',true);
+            $(confirmID).prop('disabled',true);
+        }
+        )
+    }
+
+    function orderDenied(_orderid) {
+        var confirmID = "#confirmBtn_"+ _orderid;
+        var deniedID = "#deniedBtn_"+ _orderid;
+        fetch('/admin/orderDenied', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({orderid: _orderid})
+        })
+        .then(() => {
+            $(deniedID).html('Đã hủy');
+            $(confirmID).prop('hidden',true);
+            $(deniedID).prop('disabled',true);
+        }     
+        )
+    }
 </script>

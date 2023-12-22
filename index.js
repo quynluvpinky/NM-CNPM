@@ -9,6 +9,7 @@ const app = express();
 // middleware
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); // mọi yêu cầu tĩnh trong public được xử lý trước khi qua route khác
+app.use(express.json());
 
 // view
 const handlebars = require('express-handlebars');
