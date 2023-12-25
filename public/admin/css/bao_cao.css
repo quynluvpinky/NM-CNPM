@@ -3,7 +3,7 @@
     max-width: 1000px;
 }
 .switch{
-    display: block;
+    display: contents;
 }
 /* ******************************************** */
 /* TOGGLE */
@@ -65,7 +65,8 @@
 
 /* ******************************************** */
 /* FLIP CARD */
-input[type="date"] {
+input[type="date"],
+input[type="month"] {
     width: 150px;
 }
 .flip-card__inner {
