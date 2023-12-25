@@ -1,29 +1,205 @@
-<table class="table">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xóa mặt hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="delete_input" class="form-label">Nhập tên mặt hàng cần xóa</label>
+          <input type="text" class="form-control position-relative" id="delete_input" oninput="showSuggestion(event,this.value)">
+          <ul class="list position-absolute"></ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+        <button type="button" class="btn btn-danger" onclick="sendDeleteRequest()">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table class="table table-bordered m-2">
   <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Tên mặt hàng</th>
-      <th scope="col">Số lượng</th>
-      <th scope="col">Nhập/Xuất</th>
+      <th scope="col">Số lượng nhập/xuất</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
+      <td>
+        <input class="name_input position-relative" type="text" oninput="showSuggestion(event,this.value)"
+          onkeydown="handleEnter(event)">
+        <ul class="list position-absolute">
+        </ul>
+      </td>
+      <td><input class="number_input" type="number"></td>
     </tr>
   </tbody>
 </table>
+<div class="d-flex flex-row">
+  <button type="button" class="btn btn-success m-2" onclick="addRow()">Thêm dòng</button>
+  <button type="button" class="btn btn-primary m-2" onclick="sendUpdateRequest()">Cập nhập kho hàng</button>
+  <button type="button" class="btn btn-primary m-2"><a href="/admin/them_hang_moi">Thêm hàng mới</a></button>
+  <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Xóa mặt hàng
+  </button>
+</div>
+
+<style>
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  ul {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+  }
+
+  .list {
+    width: 300px;
+    background-color: #fff;
+  }
+
+  .list-items {
+    padding: 10px 5px;
+  }
+
+  .list-items:hover {
+    background-color: #ddd;
+  }
+</style>
+
+<script>
+  var names = [];
+  getProducts();
+
+  async function getProducts() {
+    fetch('/data/product', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        names = result.map(item => {
+          return item.name;
+        })
+      })
+  }
+  function showSuggestion(event, str) {
+    removeElements();
+    var suggestions = names.filter(function (name) {
+      return name.toLowerCase().includes(str.toLowerCase()) && str != "";
+    });
+
+    let inputBtn = event.target;
+    let ul = inputBtn.nextElementSibling;
+
+    suggestions.forEach(name => {
+      let listItem = document.createElement("li");
+      listItem.innerHTML = name;
+      listItem.classList.add("list-items");
+      listItem.onclick = function (event) {
+        displayName(event, name);
+      }
+      ul.appendChild(listItem);
+    })
+  }
+  function displayName(e, name) {
+    let inputBtn = e.target.parentElement.previousElementSibling;
+    inputBtn.value = name;
+    removeElements();
+  }
+  function removeElements() {
+    let items = document.querySelectorAll(".list-items");
+    items.forEach((item) => {
+      item.remove();
+    })
+  }
+  function handleEnter(event) {
+    if (event.key == "Enter") {
+      removeElements();
+    }
+  }
+
+  //Thêm dòng
+  function addRow() {
+    var table = document.getElementsByClassName("table")[0];
+    var row = table.insertRow();
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = `<input class="name_input position-relative" type="text" oninput="showSuggestion(event,this.value)" onkeydown="handleEnter(event)">
+        <ul class="list position-absolute">
+        </ul>`
+    var cell2 = row.insertCell(1);
+    cell2.innerHTML = `<input class="number_input" type="number">`
+  }
+
+  //Lấy dữ liệu
+  function getDataFromTable() {
+    var tableRows = document.querySelectorAll('.table tbody tr');
+    var dataArray = [];
+
+    tableRows.forEach(function (row) {
+      var nameInput = row.querySelector('.name_input');
+      var numberInput = row.querySelector('.number_input');
+      if (nameInput.value.trim() !== '' && numberInput.value.trim() !== '') {
+        var rowData = {
+          name: nameInput.value,
+          value: numberInput.value
+        };
+        dataArray.push(rowData);
+      }
+    });
+    return (dataArray);
+  }
+
+  //Gửi dữ liệu đi
+  function sendUpdateRequest() {
+    let data = getDataFromTable();
+    fetch('/admin/nhap_xuat_hang', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: data })
+    })
+      .then(() => {
+        alert("Cập nhập dữ liệu thành công");
+        location.reload();
+      })
+      .catch((e) => {
+        alert('Đã xảy ra lỗi: ' + e.message);
+      })
+  }
+
+  async function sendDeleteRequest() {
+    let _data = $('#delete_input')[0].value;
+    const response = await fetch('/admin/xoa_mat_hang', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: _data })
+    })
+      .then((res) => {
+         if (!res.ok) {
+            return res.json().then(data => {
+              throw new Error(data.error);
+            })
+          }
+        alert("Cập nhập dữ liệu thành công");
+        location.reload();
+      })
+      .catch(e => {
+        alert(e.message);
+      })
+  }
+</script>

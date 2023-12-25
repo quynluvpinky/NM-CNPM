@@ -1,5 +1,7 @@
 const db = require('../../utilities/db')
 const donhangM = require('../../models/donhangM')
+const foodM = require('../../models/Food')
+const productM = require('../../models/Product');
 
 class SiteController {
 
@@ -63,8 +65,16 @@ class SiteController {
     async xac_nhan_don_hang(req,res,next) {
         try {
             const id = req.body.orderid;
-            donhangM.XacNhanDonHang(id);
-            res.status(200).send('Status: OK');
+            const rs = await donhangM.KiemTraSoLuong(id);
+            console.log(rs);
+            if (rs != 1) {
+                console.log(rs);
+                res.status(501).json({error: rs})
+            }
+            else {
+                await donhangM.XacNhanDonHang(id);
+                res.status(200).send('Status: OK');
+            }
         }
         catch (e) {
             next(e);
@@ -83,37 +93,97 @@ class SiteController {
     }
 
     ////////////////////NHAP XUAT HANG /////////////////////  
-    nhap_xuat_hang(req, res) {
-        res.render('nhap_xuat_hang')
+    async nhap_xuat_hang(req, res,next) {
+        try {
+            res.render('nhap_xuat_hang')
+        }
+        catch(e) {
+            next(e)
+        }
     }
     
     /////////////// KIEM TRA KHO /////////////////////////////
     async kiem_tra_kho(req, res, next) {
         try {
-            const hangtonkho = await db.manyOrNone(`SELECT 
-            SANPHAMTONKHO.MASANPHAM,
-            SANPHAMTONKHO.TENSANPHAM,
-            SANPHAMTONKHO.PHOTO,
-            SANPHAMTONKHO.SOLUONG,
-            LOAISANPHAM.TENLOAI
-        FROM 
-            SANPHAMTONKHO
-        INNER JOIN 
-            LOAISANPHAM ON SANPHAMTONKHO.LOAISANPHAM = LOAISANPHAM.MALOAI`)
-            res.render('kiem_tra_kho', { hangtonkho: hangtonkho });
+            // const foods = await foodM.getAll();
+            const products = await productM.getAll();
+            // const items = foods.concat(products);
+            res.render('kiem_tra_kho',{items: products});
         }
         catch (e) {
             next(e);
         }
     }
+    async cap_nhap_kho(req,res) {
+        try {
+            const data = req.body.data;
+            data.forEach(element => {
+                db.none(`
+                UPDATE "product" 
+                SET quantity = quantity - ${element.value}
+                WHERE name = '${element.name}';
+                `)
+            });
+            res.status(200).send("Status: OK");
+        }
+        catch(e) {
+            res.status(500).json({error: e.message});
+        }
+    }
+    async them_hang_moi(req,res,next) {
+        res.render('them_hang_moi');
+    }
+    async cap_nhap_hang_moi(req,res) {
+        try {
+            const data = req.body.data;
+            await productM.insert(data);
+            res.status(200).send("Status: OK");
+        }
+        catch(e) {
+            res.status(500).json({error: e.message});
+        } 
+    }
+    async xoa_mat_hang(req,res) {
+        try {
+            const name = req.body.data;
+            const rs = await productM.delete(name);
+            if (rs) {
+                res.status(200).send("Status: OK");
+            }
+            else {
+                throw new Error("Chưa có dòng nào được thay đổi");
+            }
+        }
+        catch(e) {
+            res.status(500).json({error:e.message})
+        }
+    }
+
     // [GET] /:  
     bao_cao_doanh_thu(req, res) {
         res.render('bao_cao_doanh_thu')
     }
     // [GET] /:  
-    chi_tieu_cac_mon(req, res) {
-        res.render('chi_tieu_cac_mon')
+    async chi_tieu_cac_mon(req, res, next) {
+        try {
+            const foods = await foodM.getAll();
+            res.render('chi_tieu_cac_mon',{items: foods})
+        }
+        catch(e) {
+            next(e);
+        }
     }
+    async cap_nhap_chi_tieu(req,res) {
+        try {
+            const data = req.body.data;
+            await foodM.updateQuantity(data);
+            res.status(200).send('Status: OK');
+        }
+        catch(e) {
+            res.status(500).json({error: e.message});
+        }
+    }
+
     // [GET] /:  
     logout(req, res) {
         req.session.destroy(err => {

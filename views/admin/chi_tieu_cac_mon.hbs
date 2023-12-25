@@ -1,1 +1,91 @@
-<h1>chi_tieu_cac_mon</h1>
+<input class="m-3" type="text" id="searchInput" placeholder="Nhập tên sản phẩm...">
+{{#each items}}
+<div id="{{itemid}}" class="order-container m-3 p-3 bg-light rounded">
+    <div class="row">
+        <div class="col-2">
+            <img class="order-img rounded" src="{{photo}}" alt="...">
+        </div>
+        <div class="col-10 d-flex justify-content-between">
+            <div class="d-flex flex-column justify-content-around">
+                <div class="h2">{{name}}</div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Nhập số lượng</span>
+                    </div>
+                    <input type="number" class="form-control" aria-label="Default"
+                        aria-describedby="inputGroup-sizing-default">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/each}}
+<button type="button" class="btn btn-primary m-3" onclick="sendUpdateRequest()">Xác nhận</button>
+
+<style>
+    .order-img {
+        width: 100%;
+    }
+
+    .order-containter {
+        background-color: white;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#searchInput").on("input", function () {
+            var searchTerm = $(this).val().toLowerCase();
+
+            $(".order-container").each(function () {
+                var productName = $(this).find(".h2").text().toLowerCase();
+
+                if (productName.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+    function getData() {
+        let rows = document.querySelectorAll(".order-container")
+        data = [];
+        rows.forEach(row => {
+            let _itemid = row.id;
+            let _quantity = row.querySelector('input').value;
+            if (_itemid.trim() != '' && _quantity.trim() != '') {
+                _quantity = parseInt(_quantity);
+                let rowData = {
+                    itemid: _itemid,
+                    quantity: _quantity
+                }
+                data.push(rowData);
+            }
+        })
+        return data;
+    }
+    function sendUpdateRequest() {
+        let data = getData();
+        fetch('/admin/chi_tieu_cac_mon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ data: data })
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    return res.json().then(data => {
+                        console.log(data.error);
+                        throw new Error(data.error);
+                    })
+                }
+                alert("Cập nhập dữ liệu thành công");
+                location.reload();
+            })
+            .catch(e => {
+                alert(e.message);
+            })
+    }
+</script>

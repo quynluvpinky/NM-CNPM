@@ -62,13 +62,19 @@
             },
             body: JSON.stringify({orderid: _orderid})
         })
-        .then(() => {
-            console.log(confirmID);
+        .then((res) => {
+            if (!res.ok) {
+                return res.json().then(data => {
+                throw new Error(data.error);
+            })
+            }
             $(confirmID).html('Đã xác nhận');
             $(deniedID).prop('hidden',true);
             $(confirmID).prop('disabled',true);
-        }
-        )
+        })
+        .catch(e => {
+            alert(e.message + " không đủ số lượng");
+        })
     }
 
     function orderDenied(_orderid) {
