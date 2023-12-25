@@ -59,10 +59,6 @@ html {
     height: 100%;
 }
 
-#wrapper.toggled #page-content-wrapper {
-    position: absolute;
-    margin-right: -220px;
-}
 
 /*-------------------------------*/
 /*     Sidebar nav styles        */
@@ -529,7 +525,7 @@ html {
 
 #body {
     margin: 0;
-    margin-left: 30px;
+    /* margin-left: 30px; */
     min-height: 100%;
     padding-left: 0;
 }

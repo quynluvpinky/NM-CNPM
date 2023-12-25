@@ -1,0 +1,104 @@
+
+<table class="table table-bordered m-2" style="width: 100%;">
+    <thead>
+        <tr>
+            <th scope="col" style="width: 10%">ID</th>
+            <th scope="col">Tên mặt hàng</th>
+            <th scope="col">Ảnh hiển thị</th>
+            <th scope="col" style="width: 10%">Giá tiền</th>
+            <th scope="col" style="width: 10%;">Lượng tồn</th>
+            <th scope="col">Mô tả</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input class="id_input" type="text"></td>
+            <td>
+                <input class="name_input" type="text">
+            </td>
+            <td><input class="photo_input" type="text"></td>
+            <td><input class="price_input" type="number"></td>
+            <td><input class="quantity_input" type="number"></td>
+            <td><input class="description_input" type="text"></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex flex-row">
+    <button type="button" class="btn btn-success m-2" onclick="addRow()">Thêm dòng</button>
+    <button type="button" class="btn btn-primary m-2" onclick="sendInsertRequest()">Cập nhập kho hàng</button>
+</div>
+
+<style>
+    input  {
+        width: 100%;
+    }
+</style>
+
+<script>
+
+    function addRow() {
+        var table = document.getElementsByClassName("table")[0];
+        var row = table.insertRow();
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        cell1.innerHTML = `<input class="id_input" type="text">`;
+        cell2.innerHTML = `<input class="name_input" type="text">`;
+        cell3.innerHTML = `<input class="photo_input" type="text">`;
+        cell4.innerHTML = `<td><input class="price_input" type="number"></td>`;
+        cell5.innerHTML = ` <td><input class="quantity_input" type="number"></td>`
+        cell6.innerHTML = `<td><input class="description_input" type="text"></td>`
+    }
+
+    function getDataFromTable() {
+        var tableRows = document.querySelectorAll('.table tbody tr');
+        var dataArray = [];
+
+        tableRows.forEach(function (row) {
+            var idInput = row.querySelector('.id_input');
+            var nameInput = row.querySelector('.name_input');
+            var photoInput = row.querySelector('.photo_input');
+            var priceInput = row.querySelector('.price_input');
+            var quantityInput = row.querySelector('.quantity_input');
+            var descriptionInput = row.querySelector('.description_input');
+            if (nameInput.value.trim() !== '' && photoInput.value.trim() !== '' && priceInput.value.trim() !== '' && quantityInput.value.trim() !== '' && descriptionInput.value.trim() !== '') {
+                var rowData = {
+                    itemid: idInput.value,
+                    name: nameInput.value,
+                    photo: photoInput.value,
+                    price: priceInput.value,
+                    quantity: quantityInput.value,
+                    description: descriptionInput.value
+                };
+                dataArray.push(rowData);
+            }
+        });
+        return (dataArray);
+    }
+
+    function sendInsertRequest() {
+        const data = getDataFromTable();
+        console.log(data)
+        fetch('/admin/them_hang_moi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data: data})
+        })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.error)
+            }
+            alert("Cập nhập dữ liệu thành công");
+            location.reload();
+        })
+        .catch(e => {
+            alert("Lỗi: " + e.message);
+        })
+    }
+</script>

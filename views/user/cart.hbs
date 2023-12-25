@@ -216,6 +216,16 @@
         $('#totalAmount').html(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cost));       
     }
     $('#purchaseBtn').click(function(e){
+        if($('#fullName')[0].value.length == 0){
+            $('#toast-purchase').html('Tên khách hàng không được để trống');
+            bootstrap.Toast.getOrCreateInstance($('#liveToast')).show();
+            return;
+        }
+        if($('#phoneNumber')[0].value.length == 0){
+            $('#toast-purchase').html('Số điện thoại không được để trống');
+            bootstrap.Toast.getOrCreateInstance($('#liveToast')).show();
+            return;
+        }
         var foodOrders = [];
         var productOrders = [];
         for(let i = 0; i < localStorage.length;i++){
@@ -228,8 +238,8 @@
             }
         }
         if(foodOrders.length == 0 && product.length == 0){
-            bootstrap.Toast.getOrCreateInstance($('#liveToast')).show();
             $('#toast-purchase').html('Giỏ hàng không được để trống');
+            bootstrap.Toast.getOrCreateInstance($('#liveToast')).show();
             return;
         }
         var data = {

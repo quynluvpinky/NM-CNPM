@@ -1,1 +1,43 @@
-<h1>kiem_tra_kho</h1>
+<input class="m-3" type="text" id="searchInput" placeholder="Nhập tên sản phẩm...">
+{{#each items}}
+<div id="{{itemid}}" class="order-container m-3 p-3 bg-light rounded">
+    <div class="row">
+            <div class="col-2">
+                <img class="order-img rounded" src="{{photo}}" alt="...">
+            </div>
+            <div class="col-10 d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-around">
+                    <h5 class="h2">{{name}}</h5>
+                    <span class="fs-4 text-danger">Số lượng: {{quantity}}</span>
+                </div>
+            </div>
+    </div>
+</div>
+{{/each}}
+
+<style>
+    .order-img {
+        width: 100%;
+    }
+    .order-containter {
+        background-color: white;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+    $("#searchInput").on("input", function() {
+      var searchTerm = $(this).val().toLowerCase();
+
+      $(".order-container").each(function() {
+        var productName = $(this).find(".h2").text().toLowerCase();
+
+        if (productName.includes(searchTerm)) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+</script>

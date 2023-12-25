@@ -1,4 +1,7 @@
 const db = require('../utilities/db');
+const pgp = require('pg-promise')({
+    capSQL: true // if you want all generated SQL capitalized
+ });
 const tbName = 'food';
 module.exports = class Food{
     constructor({itemid, name, photo, price,quantity, description}){
@@ -29,5 +32,10 @@ module.exports = class Food{
         const total_pages = Math.floor((arr.length + per_page - 1)/ per_page); 
         const data = arr.slice((page - 1) * per_page, page * per_page)
         return {page, per_page, total_pages, data};
+    }
+    static async updateQuantity(data) {
+        const query = pgp.helpers.update(data,['itemid','quantity'],tbName) + 'WHERE v.itemid = t.itemid';
+        console.log(query);
+        await db.none(query);
     }
 }
