@@ -68,6 +68,10 @@
 input[type="date"],
 input[type="month"] {
     width: 150px;
+    pointer-events: auto;
+}
+button{
+    pointer-events: auto;
 }
 .flip-card__inner {
     transition: transform 0.8s;
@@ -81,7 +85,10 @@ input[type="month"] {
     flex-direction: column;
     justify-content: center;
 
+    /* xoay chiều đúng của mặt sau */
     backface-visibility: hidden;
+    /* tránh bấm vào thẻ cũng xoay */
+    pointer-events: none;
 
     background: lightgrey;
     gap: 20px;
