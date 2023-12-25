@@ -171,12 +171,17 @@
       },
       body: JSON.stringify({ data: data })
     })
-      .then(() => {
+      .then((res) => {
+         if (!res.ok) {
+            return res.json().then(data => {
+              throw new Error(data.error);
+            })
+          }
         alert("Cập nhập dữ liệu thành công");
         location.reload();
       })
-      .catch((e) => {
-        alert('Đã xảy ra lỗi: ' + e.message);
+      .catch(e => {
+        alert(e.message + " không đủ số lượng để xuất");
       })
   }
 

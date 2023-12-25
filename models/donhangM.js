@@ -43,6 +43,20 @@ module.exports = class DONHANG {
         })
         return rs;
     }
+    static async KiemTraSoLuongTruocKhiNhapXuat(data) {
+        var check =1;
+        data.forEach(async (element) => {
+            let curQuantity = await db.one(`
+        SELECT quantity FROM product
+        WHERE name = '${element.name}'
+        `)
+            let sum = parseInt(curQuantity.quantity) + parseInt(element.value);
+            if (sum < 0) {
+                check = 0;
+            }
+        })
+        return check;
+    }
     static async XacNhanDonHang(_orderid, _quantity) {
         
             //Thay đổi số lượng tồn kho
