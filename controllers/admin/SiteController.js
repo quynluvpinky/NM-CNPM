@@ -160,9 +160,14 @@ class SiteController {
     }
 
     // [GET] /:  
-    bao_cao_doanh_thu(req, res) {
-        res.render('bao_cao_doanh_thu')
+    async revenue(req, res, next) {
+        try {
+            res.render('revenue')
+        } catch (e) {
+            next(e);
+        }
     }
+
     // [GET] /:  
     async chi_tieu_cac_mon(req, res, next) {
         try {

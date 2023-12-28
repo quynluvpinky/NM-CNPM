@@ -17,6 +17,7 @@ class RevenueController {
         }
 
         try {
+            console.log(parsedDate);
             const result = await Revenue.getRevenueByDate(parsedDate);
             res.status(200).json(result);
         } catch (error) {
@@ -34,14 +35,10 @@ class RevenueController {
             return res.status(400).json({ error: 'Missing month parameter.' });
         }
 
-        const parsedMonth = parseInt(monthParam);
-
-        // Kiểm tra xem parsedMonth có là số nguyên không
-        if (isNaN(parsedMonth)) {
-            return res.status(400).json({ error: 'Invalid month parameter format.' });
-        }
-
+        const parsedMonth = monthParam;
+        
         try {
+            console.log(parsedMonth);
             const result = await Revenue.getRevenueByMonth(parsedMonth);
             res.status(200).json(result);
         } catch (error) {

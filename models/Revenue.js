@@ -31,13 +31,13 @@ class RevenueModel {
     static async getRevenueByMonth(month) {
         try {
             const result = await db.any(`
-            SELECT date, SUM(price * quantity) AS total
+            SELECT TO_CHAR(date, 'YYYY-MM-DD') AS date, SUM(price * quantity) AS total
             FROM (
                 SELECT o.date, fo.itemid, fo.quantity, f.name, f.price
                 FROM foodorder fo
                 JOIN food f ON f.itemid = fo.itemid
                 JOIN "order" o ON o.orderid = fo.orderid
-                WHERE o.order_status = 'purchased'
+                WHERE o.order_status = 'purchased' AND TO_CHAR(o.date, 'YYYY-MM') = $1
 
                 UNION ALL
 
@@ -45,7 +45,7 @@ class RevenueModel {
                 FROM productorder po
                 JOIN product p ON p.itemid = po.itemid
                 JOIN "order" o ON o.orderid = po.orderid
-                WHERE o.order_status = 'purchased'
+                WHERE o.order_status = 'purchased' AND TO_CHAR(o.date, 'YYYY-MM') = $1
             ) AS combined_data
             GROUP BY date;
             `, month);

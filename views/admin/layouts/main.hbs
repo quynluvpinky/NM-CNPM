@@ -25,15 +25,15 @@
         {{> sidebar}}
 
         <!-- Page Content -->
-        <div id="title">DASHBOARD</div>
-        <hr id="hr_dashboard" class="my-0 w-100">
         <div id="page-content-wrapper">
-            <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+            <div id="title">DASHBOARD</div>
+            
+            <button type="button" class="hamburger animated fadeInLeft is-open" data-toggle="offcanvas">
                 <span class="hamb-top"></span>
                 <span class="hamb-middle"></span>
                 <span class="hamb-bottom"></span>
             </button>
-            <div id="body" class="container">
+            <div id="body" class="container-fluid">
                 {{{body}}}
             </div>
         </div>

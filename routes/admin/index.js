@@ -14,7 +14,7 @@ router.post('/them_hang_moi',siteController.cap_nhap_hang_moi);
 router.post('/xoa_mat_hang',siteController.xoa_mat_hang);
 
 router.get('/kiem_tra_kho', siteController.kiem_tra_kho);
-router.get('/bao_cao_doanh_thu', siteController.bao_cao_doanh_thu);
+router.get('/revenue', siteController.revenue);
 router.get('/chi_tieu_cac_mon', siteController.chi_tieu_cac_mon);
 router.post('/chi_tieu_cac_mon',siteController.cap_nhap_chi_tieu);
 

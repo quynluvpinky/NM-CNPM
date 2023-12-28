@@ -144,7 +144,7 @@ html {
     width: 100%;
     display: inline-block;
     background: #212531;
-    background: linear-gradient(to right bottom, #2f3441 50%, #212531 50%);
+    background: rgba(85, 89, 119, 0.459);
     padding-top: 0.6em;
     color: #ddd;
 }
@@ -163,25 +163,23 @@ html {
 /*-------------------------------*/
 
 #title {
-    font-size: 42px;
-    margin-left: 80px;
-    margin-bottom: 10px;
+    position: fixed;
+    font-size: 41px;
+    padding-left: 80px;
+    padding-bottom: 3px;
     font-weight: bolder;
+    width: 100%;
+    background-color: #767676;
+    z-index: 9998;
 }
-
-#hr_dashboard {
-    border-top: 3px solid #1a1a1a;
-    padding-bottom: 25px;
-}
-
 
 .hamburger {
     position: fixed;
-    top: 20px;
-    z-index: 999;
+    top: 18px;
+    z-index: 9999;
     display: block;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     margin-left: 15px;
     background: transparent;
     border: none;
@@ -191,58 +189,6 @@ html {
 .hamburger:focus,
 .hamburger:active {
     outline: none;
-}
-
-.hamburger.is-closed:before {
-    content: '';
-    display: block;
-    width: 100px;
-    font-size: 14px;
-    color: #fff;
-    line-height: 32px;
-    text-align: center;
-    opacity: 0;
-    -webkit-transform: rotate(45deg);
-    /* Safari and Chrome */
-    -ms-transform: rotate(45deg);
-    /* IE 9 */
-    transform: rotate(45deg);
-    /* Standard syntax */
-    -webkit-transform: translate3d(0, 0, 0);
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
-}
-
-.hamburger.is-closed:hover:before {
-    opacity: 1;
-    display: block;
-    -webkit-transform: rotate(45deg);
-    /* Safari and Chrome */
-    -ms-transform: rotate(45deg);
-    /* IE 9 */
-    transform: rotate(45deg);
-    /* Standard syntax */
-    -webkit-transform: translate3d(-100px, 0, 0);
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
 }
 
 .hamburger.is-closed .hamb-top,
@@ -265,17 +211,6 @@ html {
 
 .hamburger.is-closed .hamb-top {
     top: 5px;
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
 }
 
 .hamburger.is-closed .hamb-middle {
@@ -285,48 +220,9 @@ html {
 
 .hamburger.is-closed .hamb-bottom {
     bottom: 5px;
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
 }
 
-.hamburger.is-closed:hover .hamb-top {
-    top: 0;
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
-}
 
-.hamburger.is-closed:hover .hamb-bottom {
-    bottom: 0;
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
-}
 
 .hamburger.is-open .hamb-top,
 .hamburger.is-open .hamb-middle,
@@ -342,23 +238,7 @@ html {
 
 .hamburger.is-open .hamb-top {
     -webkit-transform: rotate(45deg);
-    /* Safari and Chrome */
-    -ms-transform: rotate(45deg);
-    /* IE 9 */
-    transform: rotate(45deg);
-    /* Standard syntax */
-    -webkit-transform: rotate(45deg);
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: -webkit-transform .2s cubic-bezier(.73, 1, .28, .08);
+    -webkit-transition: width 1s, -webkit-transform .2s cubic-bezier(.73, 1, .28, .08);
 }
 
 .hamburger.is-open .hamb-middle {
@@ -366,24 +246,8 @@ html {
 }
 
 .hamburger.is-open .hamb-bottom {
-    -webkit-transform: rotate(45deg);
-    /* Safari and Chrome */
-    -ms-transform: rotate(45deg);
-    /* IE 9 */
-    transform: rotate(45deg);
-    /* Standard syntax */
     -webkit-transform: rotate(-45deg);
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: -webkit-transform .2s cubic-bezier(.73, 1, .28, .08);
+    -webkit-transition: width 1s, -webkit-transform .2s cubic-bezier(.73, 1, .28, .08);
 }
 
 .hamburger.is-open:before {
@@ -395,47 +259,15 @@ html {
     line-height: 32px;
     text-align: center;
     opacity: 0;
-    -webkit-transform: rotate(45deg);
-    /* Safari and Chrome */
-    -ms-transform: rotate(45deg);
-    /* IE 9 */
-    transform: rotate(45deg);
-    /* Standard syntax */
-    -webkit-transform: translate3d(0, 0, 0);
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
+    -webkit-transform: rotate(45deg) translate3d(0, 0, 0);
+    -webkit-transition: width 1s, all .35s ease-in-out;
 }
 
 .hamburger.is-open:hover:before {
     opacity: 1;
     display: block;
-    -webkit-transform: rotate(45deg);
-    /* Safari and Chrome */
-    -ms-transform: rotate(45deg);
-    /* IE 9 */
-    transform: rotate(45deg);
-    /* Standard syntax */
-    -webkit-transform: translate3d(-100px, 0, 0);
-    -webkit-transition: width 1s;
-    /* Safari and Chrome */
-    -moz-transition: width 1s;
-    /* Firefox */
-    -ms-transition: width 1s;
-    /* IE 10 and IE 11 */
-    -o-transition: width 1s;
-    /* Opera */
-    transition: width 1s;
-    /* Standard syntax */
-    -webkit-transition: all .35s ease-in-out;
+    -webkit-transform: rotate(45deg) translate3d(-100px, 0, 0);
+    -webkit-transition: width 1s, all .35s ease-in-out;
 }
 
 /*-------------------------------*/
@@ -524,8 +356,9 @@ html {
 }
 
 #body {
+    padding: 0;
+    padding-top: 80px;
     margin: 0;
-    /* margin-left: 30px; */
     min-height: 100%;
-    padding-left: 0;
+    width: 100%;
 }

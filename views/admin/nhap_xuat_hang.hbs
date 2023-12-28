@@ -1,52 +1,54 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Xóa mặt hàng</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="delete_input" class="form-label">Nhập tên mặt hàng cần xóa</label>
-          <input type="text" class="form-control position-relative" id="delete_input" oninput="showSuggestion(event,this.value)">
-          <ul class="list position-absolute"></ul>
+<main class="m-2">
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Xóa mặt hàng</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-        <button type="button" class="btn btn-danger" onclick="sendDeleteRequest()">Xác nhận</button>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="delete_input" class="form-label">Nhập tên mặt hàng cần xóa</label>
+            <input type="text" class="form-control position-relative" id="delete_input" oninput="showSuggestion(event,this.value)">
+            <ul class="list position-absolute"></ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+          <button type="button" class="btn btn-danger" onclick="sendDeleteRequest()">Xác nhận</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<table class="table table-bordered m-2">
-  <thead>
-    <tr>
-      <th scope="col">Tên mặt hàng</th>
-      <th scope="col">Số lượng nhập/xuất</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <input class="name_input position-relative" type="text" oninput="showSuggestion(event,this.value)"
-          onkeydown="handleEnter(event)">
-        <ul class="list position-absolute">
-        </ul>
-      </td>
-      <td><input class="number_input" type="number"></td>
-    </tr>
-  </tbody>
-</table>
-<div class="d-flex flex-row">
-  <button type="button" class="btn btn-success m-2" onclick="addRow()">Thêm dòng</button>
-  <button type="button" class="btn btn-primary m-2" onclick="sendUpdateRequest()">Cập nhập kho hàng</button>
-  <button type="button" class="btn btn-primary m-2"><a href="/admin/them_hang_moi">Thêm hàng mới</a></button>
-  <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Xóa mặt hàng
-  </button>
-</div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Tên mặt hàng</th>
+        <th scope="col">Số lượng nhập/xuất</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <input class="name_input position-relative" type="text" oninput="showSuggestion(event,this.value)"
+            onkeydown="handleEnter(event)">
+          <ul class="list position-absolute">
+          </ul>
+        </td>
+        <td><input class="number_input" type="number"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex flex-row">
+    <button type="button" class="btn btn-success m-2" onclick="addRow()">Thêm dòng</button>
+    <button type="button" class="btn btn-primary m-2" onclick="sendUpdateRequest()">Cập nhập kho hàng</button>
+    <button type="button" class="btn btn-primary m-2"><a href="/admin/them_hang_moi">Thêm hàng mới</a></button>
+    <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Xóa mặt hàng
+    </button>
+  </div>
+</main>
 
 <style>
   a {
