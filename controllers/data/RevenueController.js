@@ -17,7 +17,6 @@ class RevenueController {
         }
 
         try {
-            console.log(parsedDate);
             const result = await Revenue.getRevenueByDate(parsedDate);
             res.status(200).json(result);
         } catch (error) {
@@ -38,7 +37,6 @@ class RevenueController {
         const parsedMonth = monthParam;
         
         try {
-            console.log(parsedMonth);
             const result = await Revenue.getRevenueByMonth(parsedMonth);
             res.status(200).json(result);
         } catch (error) {
