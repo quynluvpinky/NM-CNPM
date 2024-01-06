@@ -190,8 +190,10 @@
         if(input.value == 0 && !removeProductBtn(key,type)){
             input.value = '1';
         }
-        if(parseInt(input.value) > parseInt($(`#quantity-${key}`).html()))
+        if(parseInt(input.value) > parseInt($(`#quantity-${key}`).html())){
             input.value = $(`#quantity-${key}`).html();
+            alert("Vượt quá số lượng hàng tồn")
+        }
         localStorage.setItem(`${key}-${type}`, input.value);
         updateTotalCost();
     }
